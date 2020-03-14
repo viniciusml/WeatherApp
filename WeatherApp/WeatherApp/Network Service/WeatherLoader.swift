@@ -12,12 +12,18 @@ class WeatherLoader {
     let client: NetworkAdapter
     let url: URL
     
+    enum Error: Swift.Error {
+        case connectivity
+    }
+    
     init(url: URL, client: NetworkAdapter) {
         self.client = client
         self.url = url
     }
     
-    func loadCurrentWeather() {
-        client.load(from: url) { _ in }
+    func loadCurrentWeather(completion: @escaping (Error) -> Void = { _ in }) {
+        client.load(from: url) { error in
+            completion(.connectivity)
+        }
     }
 }
