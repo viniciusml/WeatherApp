@@ -17,18 +17,20 @@ class WeatherLoader {
         case invalidData
     }
     
+    typealias WeatherResult = Result<WeatherItem, Error>
+    
     init(url: URL, client: NetworkAdapter) {
         self.client = client
         self.url = url
     }
     
-    func loadCurrentWeather(completion: @escaping (Error) -> Void) {
+    func loadCurrentWeather(completion: @escaping (WeatherResult) -> Void) {
         client.load(from: url) { result in
             switch result {
             case .success:
-                completion(.invalidData)
+                completion(.failure(.invalidData))
             case .failure:
-                completion(.connectivity)
+                completion(.failure(.connectivity))
             }
         }
     }

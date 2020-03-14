@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct WeatherItem {
+struct WeatherItem: Equatable {
     let coord: Coord
     let weather: [Weather]
     let main: Main
@@ -16,14 +16,14 @@ struct WeatherItem {
     let name: String
 }
 
-struct Main {
+struct Main: Equatable {
     let temp: Double
 }
 
-struct Coord {
+struct Coord: Equatable {
     let lon, lat: Double
 }
 
-struct Weather {
+struct Weather: Equatable {
     let main, weatherDescription: String
 }
