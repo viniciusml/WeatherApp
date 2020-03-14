@@ -39,10 +39,12 @@ class CurrentWeatherLoaderTests: XCTestCase {
     
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
-        client.error = NSError(domain: "Test", code: 0)
         
         var capturedErrors = [WeatherLoader.Error]()
         sut.loadCurrentWeather { capturedErrors.append($0) }
+        
+        let clientError = NSError(domain: "Test", code: 0)
+        client.completions[0](.failure(clientError))
         
         XCTAssertEqual(capturedErrors, [.connectivity])
     }
@@ -58,12 +60,10 @@ class CurrentWeatherLoaderTests: XCTestCase {
     private class HTTPClientSpy: NetworkAdapter {
 
         var requestedURLs = [URL]()
-        var error: Error?
+        var completions = [(WeatherResult) -> Void]()
         
         func load(from url: URL, completion: @escaping (WeatherResult) -> Void) {
-            if let error = error {
-                completion(.failure(error))
-            }
+            completions.append(completion)
             requestedURLs.append(url)
         }
     }
