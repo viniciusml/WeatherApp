@@ -18,7 +18,7 @@ class CurrentWeatherLoaderTests: XCTestCase {
         XCTAssertNil(client.requestedURL)
     }
     
-    func test_load_requestDataFromURL() {
+    func test_load_requestsDataFromURL() {
         let url = URL(string: "http:a-given-url.com")!
         let (sut, client) = makeSUT(url: url)
         

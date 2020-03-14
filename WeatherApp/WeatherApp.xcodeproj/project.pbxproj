@@ -62,6 +62,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8F6A3B3F241D2A170021D3A5 /* Network Service */ = {
+			isa = PBXGroup;
+			children = (
+				8F9EA1F2241D0618009D6CD9 /* NetworkAdapter.swift */,
+				8F9EA1F7241D2636009D6CD9 /* WeatherLoader.swift */,
+				8F9EA1F9241D2668009D6CD9 /* HTTPClient.swift */,
+			);
+			path = "Network Service";
+			sourceTree = "<group>";
+		};
 		8F9EA1BD241CF5A0009D6CD9 = {
 			isa = PBXGroup;
 			children = (
@@ -83,15 +93,13 @@
 		8F9EA1C8241CF5A0009D6CD9 /* WeatherApp */ = {
 			isa = PBXGroup;
 			children = (
+				8F6A3B3F241D2A170021D3A5 /* Network Service */,
 				8F9EA1C9241CF5A0009D6CD9 /* AppDelegate.swift */,
 				8F9EA1CD241CF5A0009D6CD9 /* ViewController.swift */,
 				8F9EA1D2241CF5A2009D6CD9 /* Assets.xcassets */,
 				8F9EA1D4241CF5A2009D6CD9 /* LaunchScreen.storyboard */,
 				8F9EA1D7241CF5A2009D6CD9 /* Info.plist */,
 				8F9EA1EF241CFE33009D6CD9 /* WeatherItem.swift */,
-				8F9EA1F2241D0618009D6CD9 /* NetworkAdapter.swift */,
-				8F9EA1F7241D2636009D6CD9 /* WeatherLoader.swift */,
-				8F9EA1F9241D2668009D6CD9 /* HTTPClient.swift */,
 			);
 			path = WeatherApp;
 			sourceTree = "<group>";
