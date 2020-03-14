@@ -22,7 +22,7 @@ class CurrentWeatherLoaderTests: XCTestCase {
         let url = URL(string: "http:a-given-url.com")!
         let (sut, client) = makeSUT(url: url)
         
-        sut.loadCurrentWeather()
+        sut.loadCurrentWeather { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url])
     }
@@ -31,8 +31,8 @@ class CurrentWeatherLoaderTests: XCTestCase {
         let url = URL(string: "http:a-given-url.com")!
         let (sut, client) = makeSUT(url: url)
         
-        sut.loadCurrentWeather()
-        sut.loadCurrentWeather()
+        sut.loadCurrentWeather { _ in }
+        sut.loadCurrentWeather { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url, url])
     }

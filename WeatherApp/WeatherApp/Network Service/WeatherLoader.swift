@@ -21,7 +21,7 @@ class WeatherLoader {
         self.url = url
     }
     
-    func loadCurrentWeather(completion: @escaping (Error) -> Void = { _ in }) {
+    func loadCurrentWeather(completion: @escaping (Error) -> Void) {
         client.load(from: url) { error in
             completion(.connectivity)
         }
