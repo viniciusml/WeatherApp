@@ -11,13 +11,15 @@ import XCTest
 
 class WeatherLoader {
     let client: NetworkAdapter
+    let url: URL
     
-    init(client: NetworkAdapter) {
+    init(url: URL, client: NetworkAdapter) {
         self.client = client
+        self.url = url
     }
     
     func loadCurrentWeather() {
-        client.load(from: URL(string: "http:a-given-url.com")!) { _ in }
+        client.load(from: url) { _ in }
     }
 }
 
@@ -41,18 +43,20 @@ class HTTPClientSpy: NetworkAdapter {
 class CurrentWeatherLoaderTests: XCTestCase {
     
     func test_init_doesNotRequestDataFromURL() {
+        let url = URL(string: "http:a-given-url.com")!
         let client = HTTPClientSpy()
-        _ = WeatherLoader(client: client)
+        _ = WeatherLoader(url: url, client: client)
         
         XCTAssertNil(client.requestedURL)
     }
     
     func test_load_requestDataFromURL() {
+        let url = URL(string: "http:a-given-url.com")!
         let client = HTTPClientSpy()
-        let sut = WeatherLoader(client: client)
+        let sut = WeatherLoader(url: url, client: client)
         
         sut.loadCurrentWeather()
         
-        XCTAssertNotNil(client.requestedURL)
+        XCTAssertEqual(client.requestedURL, url)
     }
 }
