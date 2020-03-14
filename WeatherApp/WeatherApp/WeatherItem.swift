@@ -8,22 +8,21 @@
 
 import Foundation
 
-struct WeatherItem: Equatable {
+struct WeatherItem: Decodable, Equatable {
     let coord: Coord
     let weather: [Weather]
     let main: Main
-    let dt: Int
     let name: String
 }
 
-struct Main: Equatable {
+struct Main: Decodable, Equatable {
     let temp: Double
 }
 
-struct Coord: Equatable {
+struct Coord: Decodable, Equatable {
     let lon, lat: Double
 }
 
-struct Weather: Equatable {
-    let main, weatherDescription: String
+struct Weather: Decodable, Equatable {
+    let main, description: String
 }

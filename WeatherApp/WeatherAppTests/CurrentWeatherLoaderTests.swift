@@ -67,6 +67,61 @@ class CurrentWeatherLoaderTests: XCTestCase {
         })
     }
     
+    func test_load_deliversItemsOn200HTTPResponseWithEmptyJSONList() {
+        let (sut, client) = makeSUT()
+        
+        let item = WeatherItem(coord: Coord(lon: 139, lat: 35), weather: [Weather(main: "Clear", description: "clear sky")], main: Main(temp: 281.52), name: "Shuzenji")
+        
+        let itemJSON: [String: Any] = [
+            "coord": [ "lon": 139,"lat": 35 ],
+              "weather": [
+                [
+                  "id": 800,
+                  "main": "Clear",
+                  "description": "clear sky",
+                  "icon": "01n"
+                ]
+              ],
+              "base": "stations",
+              "main": [
+                "temp": 281.52,
+                "feels_like": 278.99,
+                "temp_min": 280.15,
+                "temp_max": 283.71,
+                "pressure": 1016,
+                "humidity": 93
+              ],
+              "wind": [
+                "speed": 0.47,
+                "deg": 107.538
+              ],
+              "clouds": [
+                "all": 2
+              ],
+              "dt": 1560350192,
+              "sys": [
+                "type": 3,
+                "id": 2019346,
+                "message": 0.0065,
+                "country": "JP",
+                "sunrise": 1560281377,
+                "sunset": 1560333478
+              ],
+              "timezone": 32400,
+              "id": 1851632,
+              "name": "Shuzenji",
+              "cod": 200
+        ]
+        
+        var capturedResults = [WeatherLoader.WeatherResult]()
+        sut.loadCurrentWeather { capturedResults.append($0) }
+        
+        let jsonData = try! JSONSerialization.data(withJSONObject: itemJSON)
+        client.complete(withStatusCode: 200, data: jsonData)
+        
+        XCTAssertEqual(capturedResults, [.success(item)])
+    }
+    
     // MARK: - Helpers
         
     private func makeSUT(url: URL = URL(string: "http:a-given-url.com")!) -> (sut: WeatherLoader, client: HTTPClientSpy) {
