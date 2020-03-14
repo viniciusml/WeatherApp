@@ -23,10 +23,11 @@ class WeatherLoader {
     }
     
     func loadCurrentWeather(completion: @escaping (Error) -> Void) {
-        client.load(from: url) { error, response in
-            if response != nil {
+        client.load(from: url) { result in
+            switch result {
+            case .success:
                 completion(.invalidData)
-            } else {
+            case .failure:
                 completion(.connectivity)
             }
         }
