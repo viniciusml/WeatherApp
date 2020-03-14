@@ -51,9 +51,51 @@ class CurrentWeatherLoaderTests: XCTestCase {
         
         let samples = [199, 201, 400, 300, 500]
         
+        let itemJSON: [String: Any] = [
+            "coord": [ "lon": 139,"lat": 35 ],
+              "weather": [
+                [
+                  "id": 800,
+                  "main": "Clear",
+                  "description": "clear sky",
+                  "icon": "01n"
+                ]
+              ],
+              "base": "stations",
+              "main": [
+                "temp": 281.52,
+                "feels_like": 278.99,
+                "temp_min": 280.15,
+                "temp_max": 283.71,
+                "pressure": 1016,
+                "humidity": 93
+              ],
+              "wind": [
+                "speed": 0.47,
+                "deg": 107.538
+              ],
+              "clouds": [
+                "all": 2
+              ],
+              "dt": 1560350192,
+              "sys": [
+                "type": 3,
+                "id": 2019346,
+                "message": 0.0065,
+                "country": "JP",
+                "sunrise": 1560281377,
+                "sunset": 1560333478
+              ],
+              "timezone": 32400,
+              "id": 1851632,
+              "name": "Shuzenji",
+              "cod": 200
+        ]
+                
         samples.enumerated().forEach { index, code in
             expect(sut, toCompleteWith: .failure(.invalidData), when: {
-                client.complete(withStatusCode: code, at: index)
+                let jsonData = try! JSONSerialization.data(withJSONObject: itemJSON)
+                client.complete(withStatusCode: code, data: jsonData, at: index)
             })
         }
     }
@@ -151,7 +193,7 @@ class CurrentWeatherLoaderTests: XCTestCase {
             messages[index].completion(.failure(error))
         }
         
-        func complete(withStatusCode code: Int, data: Data = Data(), at index: Int = 0) {
+        func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
             let response = HTTPURLResponse(url: requestedURLs[index], statusCode: code, httpVersion: nil, headerFields: nil)!
             messages[index].completion(.success((data, response)))
         }
