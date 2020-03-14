@@ -40,13 +40,10 @@ class CurrentWeatherLoaderTests: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         
-        var capturedErrors = [WeatherLoader.Error]()
-        sut.loadCurrentWeather { capturedErrors.append($0) }
-        
-        let clientError = NSError(domain: "Test", code: 0)
-        client.complete(with: clientError)
-        
-        XCTAssertEqual(capturedErrors, [.connectivity])
+        expect(sut, toCompleteWithError: .connectivity, when: {
+            let clientError = NSError(domain: "Test", code: 0)
+            client.complete(with: clientError)
+        })
     }
     
     func test_load_deliversErrorOnNon200HTTPResponse() {
@@ -55,33 +52,36 @@ class CurrentWeatherLoaderTests: XCTestCase {
         let samples = [199, 201, 400, 300, 500]
         
         samples.enumerated().forEach { index, code in
-            var capturedErrors = [WeatherLoader.Error]()
-            sut.loadCurrentWeather { capturedErrors.append($0) }
-            
-            client.complete(withStatusCode: 400, at: index)
-            
-            XCTAssertEqual(capturedErrors, [.invalidData])
+            expect(sut, toCompleteWithError: .invalidData, when: {
+                client.complete(withStatusCode: code, at: index)
+            })
         }
     }
     
     func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() {
         let (sut, client) = makeSUT()
         
-        var capturedErrors = [WeatherLoader.Error]()
-        sut.loadCurrentWeather { capturedErrors.append($0) }
-        
-        let invalidJSON = Data("Invalid Json".utf8)
-        client.complete(withStatusCode: 200, data: invalidJSON)
-        
-        XCTAssertEqual(capturedErrors, [.invalidData])
+        expect(sut, toCompleteWithError: .invalidData, when: {
+            let invalidJSON = Data("Invalid Json".utf8)
+            client.complete(withStatusCode: 200, data: invalidJSON)
+        })
     }
     
     // MARK: - Helpers
-    
+        
     private func makeSUT(url: URL = URL(string: "http:a-given-url.com")!) -> (sut: WeatherLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
         let sut = WeatherLoader(url: url, client: client)
         return (sut, client)
+    }
+    
+    private func expect(_ sut: WeatherLoader, toCompleteWithError error: WeatherLoader.Error, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+        var capturedErrors = [WeatherLoader.Error]()
+        sut.loadCurrentWeather { capturedErrors.append($0) }
+        
+        action()
+        
+        XCTAssertEqual(capturedErrors, [error], file: file, line: line)
     }
     
     private class HTTPClientSpy: NetworkAdapter {
