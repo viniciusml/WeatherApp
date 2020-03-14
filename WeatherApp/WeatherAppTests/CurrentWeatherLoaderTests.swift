@@ -9,28 +9,6 @@
 import XCTest
 @testable import WeatherApp
 
-class WeatherLoader {
-    let client: NetworkAdapter
-    let url: URL
-    
-    init(url: URL, client: NetworkAdapter) {
-        self.client = client
-        self.url = url
-    }
-    
-    func loadCurrentWeather() {
-        client.load(from: url) { _ in }
-    }
-}
-
-class HTTPClient {
-    var requestedURL: URL?
-    
-    func load() {
-        
-    }
-}
-
 class CurrentWeatherLoaderTests: XCTestCase {
     
     func test_init_doesNotRequestDataFromURL() {
