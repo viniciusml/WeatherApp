@@ -11,5 +11,5 @@ import Foundation
 typealias WeatherResult = Result<WeatherItem, Error>
 
 protocol NetworkAdapter {
-    func load(completion: @escaping (WeatherResult) -> Void)
+    func load(from url: URL, completion: @escaping (WeatherResult) -> Void)
 }
