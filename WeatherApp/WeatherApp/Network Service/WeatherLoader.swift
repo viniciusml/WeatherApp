@@ -14,6 +14,7 @@ class WeatherLoader {
     
     enum Error: Swift.Error {
         case connectivity
+        case invalidData
     }
     
     init(url: URL, client: NetworkAdapter) {
@@ -22,8 +23,12 @@ class WeatherLoader {
     }
     
     func loadCurrentWeather(completion: @escaping (Error) -> Void) {
-        client.load(from: url) { error in
-            completion(.connectivity)
+        client.load(from: url) { error, response in
+            if response != nil {
+                completion(.invalidData)
+            } else {
+                completion(.connectivity)
+            }
         }
     }
 }
