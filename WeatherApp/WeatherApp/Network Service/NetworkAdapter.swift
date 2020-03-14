@@ -8,8 +8,8 @@
 
 import Foundation
 
-typealias WeatherResult = Result<(Data, HTTPURLResponse), Error>
+typealias HTTPResult = Result<(Data, HTTPURLResponse), Error>
 
 protocol NetworkAdapter {
-    func load(from url: URL, completion: @escaping (WeatherResult) -> Void)
+    func load(from url: URL, completion: @escaping (HTTPResult) -> Void)
 }

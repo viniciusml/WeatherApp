@@ -86,12 +86,12 @@ class CurrentWeatherLoaderTests: XCTestCase {
     
     private class HTTPClientSpy: NetworkAdapter {
         
-        var messages = [(url: URL, completion: (WeatherResult) -> Void)]()
+        var messages = [(url: URL, completion: (HTTPResult) -> Void)]()
         var requestedURLs: [URL] {
             return messages.map { $0.url }
         }
         
-        func load(from url: URL, completion: @escaping (WeatherResult) -> Void) {
+        func load(from url: URL, completion: @escaping (HTTPResult) -> Void) {
             messages.append((url, completion))
         }
         
