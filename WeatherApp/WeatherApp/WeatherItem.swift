@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct CurrentWeatherItem {
+struct WeatherItem {
     let coord: Coord
     let weather: [Weather]
     let main: Main
