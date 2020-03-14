@@ -58,17 +58,18 @@ class CurrentWeatherLoaderTests: XCTestCase {
     }
     
     private class HTTPClientSpy: NetworkAdapter {
-
-        var requestedURLs = [URL]()
-        var completions = [(WeatherResult) -> Void]()
+        
+        var messages = [(url: URL, completion: (WeatherResult) -> Void)]()
+        var requestedURLs: [URL] {
+            return messages.map { $0.url }
+        }
         
         func load(from url: URL, completion: @escaping (WeatherResult) -> Void) {
-            completions.append(completion)
-            requestedURLs.append(url)
+            messages.append((url, completion))
         }
         
         func complete(with error: Error, at index: Int = 0) {
-            completions[index](.failure(error))
+            messages[index].completion(.failure(error))
         }
     }
 }
