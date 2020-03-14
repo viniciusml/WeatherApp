@@ -15,7 +15,7 @@ class CurrentWeatherLoaderTests: XCTestCase {
         let url = URL(string: "http:a-given-url.com")!
         let (_, client) = makeSUT(url: url)
         
-        XCTAssertNil(client.requestedURL)
+        XCTAssertTrue(client.requestedURLs.isEmpty)
     }
     
     func test_load_requestsDataFromURL() {
@@ -24,7 +24,7 @@ class CurrentWeatherLoaderTests: XCTestCase {
         
         sut.loadCurrentWeather()
         
-        XCTAssertEqual(client.requestedURL, url)
+        XCTAssertEqual(client.requestedURLs, [url])
     }
     
     func test_loadsTwice_requestsDataFromURLTwice() {
@@ -47,11 +47,9 @@ class CurrentWeatherLoaderTests: XCTestCase {
     
     private class HTTPClientSpy: NetworkAdapter {
 
-        var requestedURL: URL?
         var requestedURLs = [URL]()
         
         func load(from url: URL, completion: @escaping (WeatherResult) -> Void) {
-            requestedURL = url
             requestedURLs.append(url)
         }
     }
