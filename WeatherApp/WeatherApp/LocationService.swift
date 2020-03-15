@@ -23,7 +23,11 @@ enum LocationError: Error {
 
 typealias LocationResult = Result<UserLocation, LocationError>
 
-class LocationService {
+protocol LocationAdapter {
+    func getCurrentLocation(completion: (LocationResult) -> Void)
+}
+
+class LocationService: LocationAdapter {
     
     let provider: LocationProvider
     
