@@ -7,12 +7,7 @@
 //
 
 import XCTest
-
-protocol LocationProvider {
-    var isAuthorized: Bool { get }
-    func requestAuthorization()
-    func requestLocation()
-}
+@testable import WeatherApp
 
 class LocationManagerTests: XCTestCase {
     
