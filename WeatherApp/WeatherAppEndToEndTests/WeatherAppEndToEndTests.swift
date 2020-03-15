@@ -16,8 +16,6 @@ class WeatherAppEndToEndTests: XCTestCase {
         switch getCurrentWeather() {
         case let .success(item):
             XCTAssertEqual(item.coord, Coord(lon: 139, lat: 35))
-            XCTAssertEqual(item.weather, [Weather(main: "Clouds", description: "scattered clouds")])
-            XCTAssertEqual(item.main.temp, 281.57, accuracy: 0.5)
             XCTAssertEqual(item.name, "Shuzenji")
             
         case let .failure(error):

@@ -12,6 +12,7 @@
 		8F6A3B4F241E78E10021D3A5 /* LocationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6A3B4E241E78E10021D3A5 /* LocationServiceTests.swift */; };
 		8F6A3B53241E87990021D3A5 /* LocationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6A3B52241E87990021D3A5 /* LocationProvider.swift */; };
 		8F6A3B57241E99CB0021D3A5 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6A3B56241E99CB0021D3A5 /* LocationService.swift */; };
+		8F6A3B59241EAF470021D3A5 /* LocationServiceEndToEndTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6A3B58241EAF470021D3A5 /* LocationServiceEndToEndTests.swift */; };
 		8F9EA1CA241CF5A0009D6CD9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9EA1C9241CF5A0009D6CD9 /* AppDelegate.swift */; };
 		8F9EA1CE241CF5A0009D6CD9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9EA1CD241CF5A0009D6CD9 /* ViewController.swift */; };
 		8F9EA1D3241CF5A2009D6CD9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F9EA1D2241CF5A2009D6CD9 /* Assets.xcassets */; };
@@ -54,6 +55,7 @@
 		8F6A3B4E241E78E10021D3A5 /* LocationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServiceTests.swift; sourceTree = "<group>"; };
 		8F6A3B52241E87990021D3A5 /* LocationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationProvider.swift; sourceTree = "<group>"; };
 		8F6A3B56241E99CB0021D3A5 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		8F6A3B58241EAF470021D3A5 /* LocationServiceEndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServiceEndToEndTests.swift; sourceTree = "<group>"; };
 		8F9EA1C6241CF5A0009D6CD9 /* WeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F9EA1C9241CF5A0009D6CD9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8F9EA1CD241CF5A0009D6CD9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			children = (
 				8F6A3B46241E3E480021D3A5 /* WeatherAppEndToEndTests.swift */,
 				8F6A3B48241E3E480021D3A5 /* Info.plist */,
+				8F6A3B58241EAF470021D3A5 /* LocationServiceEndToEndTests.swift */,
 			);
 			path = WeatherAppEndToEndTests;
 			sourceTree = "<group>";
@@ -413,6 +416,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F6A3B47241E3E480021D3A5 /* WeatherAppEndToEndTests.swift in Sources */,
+				8F6A3B59241EAF470021D3A5 /* LocationServiceEndToEndTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
