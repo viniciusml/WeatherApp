@@ -14,30 +14,16 @@ protocol LocationProvider {
     func requestLocation()
 }
 
-class LocationService: LocationProvider {
-    
-    var isAuthorized: Bool = false
-    var locationRequested: Bool? = nil
-    
-    func requestAuthorization() {
-        isAuthorized = true
-    }
-    
-    func requestLocation() {
-        locationRequested = true
-    }
-}
-
 class LocationManagerTests: XCTestCase {
     
     func test_init_doesNotRequestsUserAuthorization() {
-        let sut = LocationService()
+        let sut = LocationProviderMock()
         
         XCTAssertFalse(sut.isAuthorized)
     }
     
     func test_manager_requestsUserAuthorization() {
-        let sut = LocationService()
+        let sut = LocationProviderMock()
         
         sut.requestAuthorization()
         
@@ -45,10 +31,24 @@ class LocationManagerTests: XCTestCase {
     }
     
     func test_manager_requestsUserLocation() {
-        let sut = LocationService()
+        let sut = LocationProviderMock()
         
         sut.requestLocation()
         
         XCTAssertNotNil(sut.locationRequested)
+    }
+    
+    private class LocationProviderMock: LocationProvider {
+        
+        var isAuthorized: Bool = false
+        var locationRequested: Bool? = nil
+        
+        func requestAuthorization() {
+            isAuthorized = true
+        }
+        
+        func requestLocation() {
+            locationRequested = true
+        }
     }
 }
