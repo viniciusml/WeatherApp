@@ -34,12 +34,14 @@ class LocationServiceTests: XCTestCase {
     func test_service_getCurrentLocation_deliversErrorWhenNotAuthorized() {
         let (sut, _) = makeSUT()
         
-        var capturedError: Error?
-        sut.getCurrentLocation { error in
-            capturedError = error
+        sut.getCurrentLocation { result in
+            switch result {
+            case let .failure(error):
+                XCTAssertEqual(error, .cannotBeLocated)
+            default:
+                XCTFail("Expected error, but got success instead")
+            }
         }
-        
-        XCTAssertNotNil(capturedError)
     }
     
     func test_service_getCurrentLocation_requestsAuthorizationWhenNotAuthorized() {

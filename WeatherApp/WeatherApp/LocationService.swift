@@ -7,10 +7,21 @@
 //
 
 import Foundation
+import CoreLocation
+
+typealias Coordinate = CLLocationCoordinate2D
+
+protocol UserLocation {
+    var coordinate: Coordinate { get }
+}
+
+extension CLLocation: UserLocation { }
 
 enum LocationError: Error {
     case cannotBeLocated
 }
+
+typealias LocationResult = Result<UserLocation, LocationError>
 
 class LocationService {
     
@@ -20,10 +31,10 @@ class LocationService {
         self.provider = provider
     }
     
-    func getCurrentLocation(completion: (LocationError) -> Void) {
+    func getCurrentLocation(completion: (LocationResult) -> Void) {
         if !provider.isAuthorized {
             provider.requestWhenInUseAuthorization()
-            completion(.cannotBeLocated)
+            completion(.failure(.cannotBeLocated))
         } else {
             provider.requestLocation()
         }
