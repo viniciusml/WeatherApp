@@ -87,18 +87,4 @@ class LocationServiceTests: XCTestCase {
         let sut = LocationService(provider: provider)
         return (sut, provider)
     }
-    
-    private class LocationProviderMock: LocationProvider {
-        
-        var isAuthorized: Bool = false
-        var locationRequests = [Bool]()
-        
-        func requestWhenInUseAuthorization() {
-            isAuthorized.toggle()
-        }
-        
-        func requestLocation() {
-            locationRequests.append(true)
-        }
-    }
 }

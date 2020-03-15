@@ -7,9 +7,28 @@
 //
 
 import Foundation
+import CoreLocation
 
 protocol LocationProvider {
     var isAuthorized: Bool { get }
+    var locationManagerDelegate: CLLocationManagerDelegate? { get set }
+    var desiredAccuracy: CLLocationAccuracy { get set }
     func requestWhenInUseAuthorization()
     func requestLocation()
+}
+
+extension CLLocationManager: LocationProvider {
+    
+    var isAuthorized: Bool {
+        return CLLocationManager.authorizationStatus() == .authorizedWhenInUse
+    }
+
+    var locationManagerDelegate: CLLocationManagerDelegate? {
+        get { return delegate }
+        set { delegate = newValue }
+    }
+
+    func requestLocation() {
+        startUpdatingLocation()
+    }
 }
