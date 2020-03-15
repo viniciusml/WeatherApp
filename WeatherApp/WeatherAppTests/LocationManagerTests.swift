@@ -9,6 +9,25 @@
 import XCTest
 @testable import WeatherApp
 
+enum LocationError: Error {
+    case cannotBeLocated
+}
+
+class LocationService {
+    
+    let provider: LocationProvider
+    
+    init(provider: LocationProvider) {
+        self.provider = provider
+    }
+    
+    func getCurrentLocation(completion: (LocationError) -> Void) {
+        if !provider.isAuthorized {
+            completion(.cannotBeLocated)
+        }
+    }
+}
+
 class LocationManagerTests: XCTestCase {
     
     func test_init_doesNotRequestsUserAuthorization() {
@@ -31,6 +50,18 @@ class LocationManagerTests: XCTestCase {
         sut.requestLocation()
         
         XCTAssertNotNil(sut.locationRequested)
+    }
+    
+    func test_service_requestLocation_deliversErrorWhenNotAuthorized() {
+        let provider = LocationProviderMock()
+        let sut = LocationService(provider: provider)
+        
+        var capturedError: Error?
+        sut.getCurrentLocation { error in
+            capturedError = error
+        }
+        
+        XCTAssertNotNil(capturedError)
     }
     
     private class LocationProviderMock: LocationProvider {
