@@ -53,8 +53,7 @@ class LocationManagerTests: XCTestCase {
     }
     
     func test_service_requestLocation_deliversErrorWhenNotAuthorized() {
-        let provider = LocationProviderMock()
-        let sut = LocationService(provider: provider)
+        let (sut, _) = makeSUT()
         
         var capturedError: Error?
         sut.getCurrentLocation { error in
@@ -62,6 +61,14 @@ class LocationManagerTests: XCTestCase {
         }
         
         XCTAssertNotNil(capturedError)
+    }
+    
+    // MARK: - Helpers
+    
+    private func makeSUT() -> (sut: LocationService, provider: LocationProviderMock) {
+        let provider = LocationProviderMock()
+        let sut = LocationService(provider: provider)
+        return (sut, provider)
     }
     
     private class LocationProviderMock: LocationProvider {
