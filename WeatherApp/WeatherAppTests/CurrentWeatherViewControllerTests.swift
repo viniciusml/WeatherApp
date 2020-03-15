@@ -19,11 +19,12 @@ class CurrentWeatherViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.headerLabel.text, "Weather App")
     }
     
-    func test_withNoLocation_displaysZeroOptions() {
+    func test_withLocationFetched_displaysOption() {
         let sut = CurrentWeatherViewController()
         
         _ = sut.view
+        sut.getLocation()
         
-        XCTAssertEqual(sut.tableView.numberOfRows(inSection: 0), 0)
+        XCTAssertEqual(sut.tableView.numberOfRows(inSection: 0), sut.locations.count)
     }
 }
