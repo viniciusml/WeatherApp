@@ -8,8 +8,15 @@
 
 import XCTest
 
-class LocationService {
-    var isAuthorized: Bool? = nil
+protocol LocationProvider {
+    var isAuthorized: Bool { get }
+    func requestAuthorization()
+    func requestLocation()
+}
+
+class LocationService: LocationProvider {
+    
+    var isAuthorized: Bool = false
     var locationRequested: Bool? = nil
     
     func requestAuthorization() {
@@ -26,7 +33,7 @@ class LocationManagerTests: XCTestCase {
     func test_init_doesNotRequestsUserAuthorization() {
         let sut = LocationService()
         
-        XCTAssertNil(sut.isAuthorized)
+        XCTAssertFalse(sut.isAuthorized)
     }
     
     func test_manager_requestsUserAuthorization() {
