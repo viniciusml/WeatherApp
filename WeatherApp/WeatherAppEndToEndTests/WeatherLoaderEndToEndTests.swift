@@ -9,7 +9,7 @@
 import XCTest
 @testable import WeatherApp
 
-class WeatherAppEndToEndTests: XCTestCase {
+class WeatherLoaderEndToEndTests: XCTestCase {
 
     func test_endToEndGETCurrentWeather_matchesFixedTestData() {
         
