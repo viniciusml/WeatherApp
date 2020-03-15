@@ -18,7 +18,7 @@ class LocationServiceTests: XCTestCase {
     func test_provider_requestAuthorization_requestsUserAuthorization() {
         let (_, provider) = makeSUT()
         
-        provider.requestAuthorization()
+        provider.requestWhenInUseAuthorization()
         
         XCTAssertNotNil(provider.isAuthorized)
     }
@@ -91,7 +91,7 @@ class LocationServiceTests: XCTestCase {
         var isAuthorized: Bool = false
         var locationRequests = [Bool]()
         
-        func requestAuthorization() {
+        func requestWhenInUseAuthorization() {
             isAuthorized.toggle()
         }
         

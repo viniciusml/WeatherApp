@@ -10,6 +10,6 @@ import Foundation
 
 protocol LocationProvider {
     var isAuthorized: Bool { get }
-    func requestAuthorization()
+    func requestWhenInUseAuthorization()
     func requestLocation()
 }

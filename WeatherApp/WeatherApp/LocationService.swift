@@ -22,7 +22,7 @@ class LocationService {
     
     func getCurrentLocation(completion: (LocationError) -> Void) {
         if !provider.isAuthorized {
-            provider.requestAuthorization()
+            provider.requestWhenInUseAuthorization()
             completion(.cannotBeLocated)
         } else {
             provider.requestLocation()
