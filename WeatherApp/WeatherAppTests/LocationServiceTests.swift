@@ -28,31 +28,29 @@ class LocationService {
     }
 }
 
-class LocationManagerTests: XCTestCase {
+class LocationServiceTests: XCTestCase {
     
-    func test_init_doesNotRequestsUserAuthorization() {
-        let sut = LocationProviderMock()
-        
-        XCTAssertFalse(sut.isAuthorized)
+    func test_provider_init_doesNotRequestsUserAuthorization() {
+        XCTAssertFalse(makeSUT().provider.isAuthorized)
     }
     
-    func test_manager_requestsUserAuthorization() {
-        let sut = LocationProviderMock()
+    func test_provider_requestAuthorization_requestsUserAuthorization() {
+        let (_, provider) = makeSUT()
         
-        sut.requestAuthorization()
+        provider.requestAuthorization()
         
-        XCTAssertNotNil(sut.isAuthorized)
+        XCTAssertNotNil(provider.isAuthorized)
     }
     
-    func test_manager_requestsUserLocation() {
-        let sut = LocationProviderMock()
+    func test_provider_requestLocation_requestsUserLocation() {
+        let (_, provider) = makeSUT()
         
-        sut.requestLocation()
+        provider.requestLocation()
         
-        XCTAssertNotNil(sut.locationRequested)
+        XCTAssertNotNil(provider.locationRequested)
     }
     
-    func test_service_requestLocation_deliversErrorWhenNotAuthorized() {
+    func test_service_getCurrentLocation_deliversErrorWhenNotAuthorized() {
         let (sut, _) = makeSUT()
         
         var capturedError: Error?
