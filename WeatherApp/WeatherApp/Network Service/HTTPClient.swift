@@ -13,9 +13,7 @@ class HTTPClient: NetworkAdapter {
         
     func load(parameters: Coordinate? = nil, from url: URL, completion: @escaping (HTTPResult) -> Void) {
         
-        let parameters: [String: Any] = ["lat": parameters?.latitude.description, "lon": parameters?.longitude.description, "appid": "b833ce501ff196a419ba285594863c6c"]
-        
-        Alamofire.request(url, method: .get, parameters: parameters)
+        Alamofire.request(url, method: .get, parameters: assemble(parameters))
             .responseJSON { result in
                 
                 guard let response = result.response else {
@@ -29,6 +27,15 @@ class HTTPClient: NetworkAdapter {
                 }
                 
                 completion(.success((data, response)))
+        }
+    }
+    
+    private func assemble(_ parameters: Coordinate?) -> [String: String] {
+        if let latitude = parameters?.latitude.description,
+            let longitude = parameters?.longitude.description {
+            return ["lat": latitude, "lon": longitude, "appid": "b833ce501ff196a419ba285594863c6c"]
+        } else {
+            return ["appid": "b833ce501ff196a419ba285594863c6c"]
         }
     }
 }

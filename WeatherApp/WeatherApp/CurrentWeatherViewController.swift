@@ -24,6 +24,7 @@ class CurrentWeatherViewController: UIViewController {
         super.viewDidLoad()
         
         headerLabel.text = "Weather App"
+        getLocation()
     }
     
     func getLocation() {
