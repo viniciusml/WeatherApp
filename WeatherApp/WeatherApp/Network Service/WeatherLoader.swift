@@ -8,6 +8,8 @@
 
 import Foundation
 
+typealias WeatherResult = Result<WeatherItem, WeatherLoader.Error>
+
 class WeatherLoader {
     let client: NetworkAdapter
     let url: URL
@@ -16,8 +18,6 @@ class WeatherLoader {
         case connectivity
         case invalidData
     }
-    
-    typealias WeatherResult = Result<WeatherItem, Error>
     
     init(url: URL, client: NetworkAdapter) {
         self.client = client

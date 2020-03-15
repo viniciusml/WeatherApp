@@ -7,11 +7,28 @@
 //
 
 import Foundation
+import Alamofire
 
-class HTTPClient {
-    var requestedURL: URL?
-    
-    func load() {
+class HTTPClient: NetworkAdapter {
         
+    func load(from url: URL, completion: @escaping (HTTPResult) -> Void) {
+        
+        let parameters = ["lat": "35", "lon": "139", "appid": "b833ce501ff196a419ba285594863c6c"]
+        
+        Alamofire.request(url, method: .get, parameters: parameters)
+            .responseJSON { result in
+                
+                guard let response = result.response else {
+                    completion(.failure(WeatherLoader.Error.connectivity))
+                    return
+                }
+                
+                guard let data = result.data else {
+                    completion(.failure(WeatherLoader.Error.connectivity))
+                    return
+                }
+                
+                completion(.success((data, response)))
+        }
     }
 }

@@ -128,8 +128,8 @@ class CurrentWeatherLoaderTests: XCTestCase {
         return (sut, client)
     }
     
-    private func expect(_ sut: WeatherLoader, toCompleteWith result: WeatherLoader.WeatherResult, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
-        var capturedResults = [WeatherLoader.WeatherResult]()
+    private func expect(_ sut: WeatherLoader, toCompleteWith result: WeatherResult, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+        var capturedResults = [WeatherResult]()
         sut.loadCurrentWeather { capturedResults.append($0) }
         
         action()
