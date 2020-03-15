@@ -50,7 +50,7 @@ class LocationServiceTests: XCTestCase {
         
         provider.requestLocation()
         
-        XCTAssertTrue(provider.locationRequested)
+        XCTAssertFalse(provider.locationRequests.isEmpty)
     }
     
     func test_service_getCurrentLocation_deliversErrorWhenNotAuthorized() {
@@ -87,12 +87,12 @@ class LocationServiceTests: XCTestCase {
         provider.isAuthorized = true
         sut.getCurrentLocation { _ in }
         
-        XCTAssertTrue(provider.locationRequested)
+        XCTAssertEqual(provider.locationRequests, [true])
     }
     
     func test_service_getCurrentLocationTwice_requestsLocationTwice() {
         let (sut, provider) = makeSUT()
-        
+
         provider.isAuthorized = true
         sut.getCurrentLocation { _ in }
         sut.getCurrentLocation { _ in }
@@ -111,7 +111,6 @@ class LocationServiceTests: XCTestCase {
     private class LocationProviderMock: LocationProvider {
         
         var isAuthorized: Bool = false
-        var locationRequested: Bool = false
         var locationRequests = [Bool]()
         
         func requestAuthorization() {
@@ -120,7 +119,6 @@ class LocationServiceTests: XCTestCase {
         
         func requestLocation() {
             locationRequests.append(true)
-            locationRequested = true
         }
     }
 }
