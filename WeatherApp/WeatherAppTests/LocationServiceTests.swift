@@ -9,28 +9,6 @@
 import XCTest
 @testable import WeatherApp
 
-enum LocationError: Error {
-    case cannotBeLocated
-}
-
-class LocationService {
-    
-    let provider: LocationProvider
-    
-    init(provider: LocationProvider) {
-        self.provider = provider
-    }
-    
-    func getCurrentLocation(completion: (LocationError) -> Void) {
-        if !provider.isAuthorized {
-            provider.requestAuthorization()
-            completion(.cannotBeLocated)
-        } else {
-            provider.requestLocation()
-        }
-    }
-}
-
 class LocationServiceTests: XCTestCase {
     
     func test_provider_init_doesNotRequestsUserAuthorization() {
