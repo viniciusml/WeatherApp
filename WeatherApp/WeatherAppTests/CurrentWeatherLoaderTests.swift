@@ -120,6 +120,16 @@ class CurrentWeatherLoaderTests: XCTestCase {
         })
     }
     
+    func test_load_usesCoordinateAsParameters() {
+        let (sut, client) = makeSUT()
+        
+        let coordinates = Coordinate(latitude: 55.75578600, longitude: 37.61763300)
+        sut.loadCurrentWeather(parameters: coordinates) { _ in }
+        
+        XCTAssertEqual(client.receivedParameters?.latitude, coordinates.latitude)
+        XCTAssertEqual(client.receivedParameters?.longitude, coordinates.longitude)
+    }
+    
     // MARK: - Helpers
         
     private func makeSUT(url: URL = URL(string: "http:a-given-url.com")!) -> (sut: WeatherLoader, client: HTTPClientSpy) {
@@ -144,8 +154,13 @@ class CurrentWeatherLoaderTests: XCTestCase {
             return messages.map { $0.url }
         }
         
-        func load(from url: URL, completion: @escaping (HTTPResult) -> Void) {
+        var receivedParameters: Coordinate?
+        
+        func load(parameters: Coordinate?, from url: URL, completion: @escaping (HTTPResult) -> Void) {
             messages.append((url, completion))
+            if let parameters = parameters {
+                receivedParameters = parameters
+            }
         }
         
         func complete(with error: Error, at index: Int = 0) {
