@@ -23,6 +23,7 @@ class LocationService {
     
     func getCurrentLocation(completion: (LocationError) -> Void) {
         if !provider.isAuthorized {
+            provider.requestAuthorization()
             completion(.cannotBeLocated)
         }
     }
@@ -59,6 +60,14 @@ class LocationServiceTests: XCTestCase {
         }
         
         XCTAssertNotNil(capturedError)
+    }
+    
+    func test_service_getCurrentLocation_requestsAuthorizationWhenNotAuthorized() {
+        let (sut, provider) = makeSUT()
+        
+        sut.getCurrentLocation { _ in }
+        
+        XCTAssertTrue(provider.isAuthorized)
     }
     
     // MARK: - Helpers
