@@ -27,5 +27,4 @@ extension CLLocationManager: LocationProvider {
         get { return delegate }
         set { delegate = newValue }
     }
-
 }

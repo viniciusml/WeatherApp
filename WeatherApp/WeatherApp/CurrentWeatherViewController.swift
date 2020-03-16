@@ -78,10 +78,9 @@ extension CurrentWeatherViewController: UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell")
-        cell?.backgroundColor = .blue
-        cell?.textLabel?.text = currentWeather?.name
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! WeatherCell
+        cell.cityNameLabel.text = currentWeather?.name
         
-        return cell ?? UITableViewCell()
+        return cell
     }
 }
