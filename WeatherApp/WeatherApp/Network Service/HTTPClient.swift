@@ -33,7 +33,7 @@ class HTTPClient: NetworkAdapter {
     private func assemble(_ parameters: Coordinate?) -> [String: String] {
         if let latitude = parameters?.latitude.description,
             let longitude = parameters?.longitude.description {
-            return ["lat": latitude, "lon": longitude, "appid": "b833ce501ff196a419ba285594863c6c"]
+            return ["lat": latitude, "lon": longitude, "appid": "b833ce501ff196a419ba285594863c6c", "units": "metric"]
         } else {
             return ["appid": "b833ce501ff196a419ba285594863c6c"]
         }

@@ -62,7 +62,6 @@ class CurrentWeatherViewController: UIViewController {
             
             switch result {
             case .success(let item):
-                print(item)
                 self.currentWeather = item
             case .failure(let error):
                 print(error)
