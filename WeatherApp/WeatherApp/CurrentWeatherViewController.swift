@@ -2,7 +2,7 @@
 //  CurrentWeatherViewController.swift
 //  WeatherApp
 //
-//  Created by Vinicius Moreira Leal on 15/03/2020.
+//  Created by Vinicius Moreira Leal on 16/03/2020.
 //  Copyright © 2020 Vinicius Moreira Leal. All rights reserved.
 //
 
@@ -11,14 +11,28 @@ import CoreLocation
 
 class CurrentWeatherViewController: UIViewController {
     
-    @IBOutlet weak var headerLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var headerLabel: UILabel!
     
+    let client = HTTPClient()
+    var loader: WeatherLoader {
+        return WeatherLoader(url: URL(string: "http://api.openweathermap.org/data/2.5/weather")!, client: client)
+    }
     
     let provider = CLLocationManager()
     var service: LocationService?
     
-    private(set) var locations = [UserLocation]()
+    private(set) var locations = [UserLocation]() {
+        didSet {
+            getWeather(for: locations.first?.coordinate)
+        }
+    }
+    
+    private(set) var currentWeather: WeatherItem? {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,15 +55,33 @@ class CurrentWeatherViewController: UIViewController {
             }
         }
     }
+    
+    func getWeather(for location: Coordinate?) {
+        loader.loadCurrentWeather(parameters: location) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let item):
+                print(item)
+                self.currentWeather = item
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
 }
 
-extension CurrentWeatherViewController: UITableViewDataSource {
+extension CurrentWeatherViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return locations.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell")
+        cell?.backgroundColor = .blue
+        cell?.textLabel?.text = currentWeather?.name
+        
+        return cell ?? UITableViewCell()
     }
 }

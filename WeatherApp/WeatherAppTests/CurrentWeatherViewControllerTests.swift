@@ -26,14 +26,14 @@ class CurrentWeatherViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.tableView.numberOfRows(inSection: 0), sut.locations.count)
     }
     
-//    func test_withLocationFetched_displaysOptionName() {
-//        let sut = CurrentWeatherViewController()
-//        
-//        _ = sut.view
-//        
-//        let indexPath = IndexPath(row: 0, section: 0)
-//        let cell = sut.tableView.dataSource?.tableView(sut.tableView, cellForRowAt: indexPath)
-//        
-//        XCTAssertEqual(cell?.textLabel?.text, sut.locations.count)
-//    }
+    func test_withLocationFetched_displaysOptionName() {
+        let sut = CurrentWeatherViewController()
+
+        _ = sut.view
+
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = sut.tableView.dataSource?.tableView(sut.tableView, cellForRowAt: indexPath)
+
+        XCTAssertEqual(cell?.textLabel?.text, sut.currentWeather?.name)
+    }
 }
