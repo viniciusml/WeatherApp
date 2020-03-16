@@ -26,9 +26,9 @@ class CurrentWeatherViewControllerTests: XCTestCase {
         let sut = makeSUT()
 
         let indexPath = IndexPath(row: 0, section: 0)
-        let cell = sut.tableView.dataSource?.tableView(sut.tableView, cellForRowAt: indexPath)
+        let cell = sut.tableView.dataSource?.tableView(sut.tableView, cellForRowAt: indexPath) as? WeatherCell
 
-        XCTAssertEqual(cell?.textLabel?.text, sut.currentWeather?.name)
+        XCTAssertEqual(cell?.cityNameLabel?.text, sut.currentWeather?.name)
     }
     
     func test_withLocationFetched_displaysOptionTemperatureAndWeather() {
@@ -37,7 +37,9 @@ class CurrentWeatherViewControllerTests: XCTestCase {
         let indexPath = IndexPath(row: 0, section: 0)
         let cell = sut.tableView.dataSource?.tableView(sut.tableView, cellForRowAt: indexPath) as? WeatherCell
 
-        XCTAssertEqual(cell?.cityNameLabel?.text, sut.currentWeather?.name)
+        XCTAssertEqual(cell?.temperatureLabel.text, sut.currentWeather?.main.temp.description)
+        XCTAssertEqual(cell?.weatherLabel.text, sut.currentWeather?.weather.first?.main)
+        XCTAssertEqual(cell?.weatherDescriptionLabel.text, sut.currentWeather?.weather.first?.description)
     }
     
     // MARK: - Helpers

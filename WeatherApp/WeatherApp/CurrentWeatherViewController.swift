@@ -80,6 +80,9 @@ extension CurrentWeatherViewController: UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! WeatherCell
         cell.cityNameLabel.text = currentWeather?.name
+        cell.temperatureLabel.text = currentWeather?.main.temp.description
+        cell.weatherLabel.text = currentWeather?.weather.first?.main
+        cell.weatherDescriptionLabel.text = currentWeather?.weather.first?.description
         
         return cell
     }
