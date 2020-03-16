@@ -54,7 +54,7 @@ class CurrentWeatherViewController: UIViewController {
                 self.locations = []
                 self.locations.append(location)
             case let .failure(error):
-                print(error)
+                self.showBasicAlert(title: "Error", message: "There was an \(error). Please try again.")
             }
         }
     }
@@ -67,7 +67,7 @@ class CurrentWeatherViewController: UIViewController {
             case .success(let item):
                 self.currentWeather = item
             case .failure(let error):
-                print(error)
+                self.showBasicAlert(title: "Error", message: "There was an \(error). Please try again.")
             }
         }
     }
