@@ -38,7 +38,7 @@ class LocationService: NSObject, LocationAdapter {
 
 extension LocationService: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status == .authorizedWhenInUse {
+        if status == .authorizedWhenInUse || status == .authorizedAlways {
             provider.requestLocation()
         }
     }
