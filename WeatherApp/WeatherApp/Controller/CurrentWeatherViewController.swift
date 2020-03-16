@@ -24,7 +24,9 @@ class CurrentWeatherViewController: UIViewController {
     
     private(set) var locations = [UserLocation]() {
         didSet {
-            getWeather(for: locations.first?.coordinate)
+            if let coordinate = locations.first?.coordinate {
+                getWeather(for: coordinate)
+            }
         }
     }
     
