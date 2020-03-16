@@ -12,14 +12,14 @@ typealias WeatherResult = Result<WeatherItem, WeatherLoader.Error>
 
 class WeatherLoader {
     let client: NetworkAdapter
-    let url: URL
+    let url: String
     
     enum Error: Swift.Error {
         case connectivity
         case invalidData
     }
     
-    init(url: URL, client: NetworkAdapter) {
+    init(url: String, client: NetworkAdapter) {
         self.client = client
         self.url = url
     }

@@ -53,14 +53,14 @@ class CurrentWeatherLoaderTests: XCTestCase {
     ]
     
     func test_init_doesNotRequestDataFromURL() {
-        let url = URL(string: "http:a-given-url.com")!
+        let url = "http:a-given-url.com"
         let (_, client) = makeSUT(url: url)
         
         XCTAssertTrue(client.requestedURLs.isEmpty)
     }
     
     func test_load_requestsDataFromURL() {
-        let url = URL(string: "http:a-given-url.com")!
+        let url = "http:a-given-url.com"
         let (sut, client) = makeSUT(url: url)
         
         sut.loadCurrentWeather { _ in }
@@ -69,7 +69,7 @@ class CurrentWeatherLoaderTests: XCTestCase {
     }
     
     func test_loadsTwice_requestsDataFromURLTwice() {
-        let url = URL(string: "http:a-given-url.com")!
+        let url = "http:a-given-url.com"
         let (sut, client) = makeSUT(url: url)
         
         sut.loadCurrentWeather { _ in }
@@ -132,7 +132,7 @@ class CurrentWeatherLoaderTests: XCTestCase {
     
     // MARK: - Helpers
         
-    private func makeSUT(url: URL = URL(string: "http:a-given-url.com")!) -> (sut: WeatherLoader, client: HTTPClientSpy) {
+    private func makeSUT(url: String = "http:a-given-url.com") -> (sut: WeatherLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
         let sut = WeatherLoader(url: url, client: client)
         return (sut, client)
@@ -149,14 +149,14 @@ class CurrentWeatherLoaderTests: XCTestCase {
     
     private class HTTPClientSpy: NetworkAdapter {
         
-        var messages = [(url: URL, completion: (HTTPResult) -> Void)]()
-        var requestedURLs: [URL] {
+        var messages = [(url: String, completion: (HTTPResult) -> Void)]()
+        var requestedURLs: [String] {
             return messages.map { $0.url }
         }
         
         var receivedParameters: Coordinate?
         
-        func load(parameters: Coordinate?, from url: URL, completion: @escaping (HTTPResult) -> Void) {
+        func load(parameters: Coordinate?, from url: String, completion: @escaping (HTTPResult) -> Void) {
             messages.append((url, completion))
             if let parameters = parameters {
                 receivedParameters = parameters
@@ -168,7 +168,7 @@ class CurrentWeatherLoaderTests: XCTestCase {
         }
         
         func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
-            let response = HTTPURLResponse(url: requestedURLs[index], statusCode: code, httpVersion: nil, headerFields: nil)!
+            let response = HTTPURLResponse(url: URL(string: requestedURLs[index])!, statusCode: code, httpVersion: nil, headerFields: nil)!
             messages[index].completion(.success((data, response)))
         }
     }

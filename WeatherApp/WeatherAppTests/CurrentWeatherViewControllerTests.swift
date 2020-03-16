@@ -12,28 +12,31 @@ import XCTest
 class CurrentWeatherViewControllerTests: XCTestCase {
     
     func test_viewDidLoad_displaysHeaderText() {
-        let sut = CurrentWeatherViewController()
-        
-        _ = sut.view
+        let sut = makeSUT()
         
         XCTAssertEqual(sut.headerLabel.text, "Weather App")
     }
     
     func test_withLocationFetched_displaysOption() {
-        let sut = CurrentWeatherViewController()
-        
-        _ = sut.view
+        let sut = makeSUT()
         XCTAssertEqual(sut.tableView.numberOfRows(inSection: 0), sut.locations.count)
     }
     
     func test_withLocationFetched_displaysOptionName() {
-        let sut = CurrentWeatherViewController()
-
-        _ = sut.view
+        let sut = makeSUT()
 
         let indexPath = IndexPath(row: 0, section: 0)
         let cell = sut.tableView.dataSource?.tableView(sut.tableView, cellForRowAt: indexPath)
 
         XCTAssertEqual(cell?.textLabel?.text, sut.currentWeather?.name)
+    }
+    
+    // MARK: - Helpers
+    
+    private func makeSUT() -> CurrentWeatherViewController {
+        let storyboard = UIStoryboard(name: "CurrentWeather", bundle: nil)
+        let controller = storyboard.instantiateInitialViewController()
+        controller?.loadViewIfNeeded()
+        return controller as! CurrentWeatherViewController
     }
 }

@@ -11,7 +11,7 @@
         <!--Current Weather View Controller-->
         <scene sceneID="wJJ-7M-Bdp">
             <objects>
-                <viewController id="kcN-IG-Kwr" customClass="CurrentWeatherViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CurrentWeatherViewController" id="kcN-IG-Kwr" customClass="CurrentWeatherViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aR6-cZ-wwI">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

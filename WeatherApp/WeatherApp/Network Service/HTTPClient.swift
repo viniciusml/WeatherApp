@@ -11,7 +11,7 @@ import Alamofire
 
 class HTTPClient: NetworkAdapter {
         
-    func load(parameters: Coordinate? = nil, from url: URL, completion: @escaping (HTTPResult) -> Void) {
+    func load(parameters: Coordinate? = nil, from url: String, completion: @escaping (HTTPResult) -> Void) {
         
         Alamofire.request(url, method: .get, parameters: assemble(parameters))
             .responseJSON { result in

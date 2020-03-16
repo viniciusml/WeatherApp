@@ -16,7 +16,7 @@ class CurrentWeatherViewController: UIViewController {
     
     let client = HTTPClient()
     var loader: WeatherLoader {
-        return WeatherLoader(url: URL(string: "http://api.openweathermap.org/data/2.5/weather")!, client: client)
+        return WeatherLoader(url: "http://api.openweathermap.org/data/2.5/weather", client: client)
     }
     
     let provider = CLLocationManager()
