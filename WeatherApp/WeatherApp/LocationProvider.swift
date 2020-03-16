@@ -28,7 +28,4 @@ extension CLLocationManager: LocationProvider {
         set { delegate = newValue }
     }
 
-    func requestLocation() {
-        startUpdatingLocation()
-    }
 }
