@@ -12,15 +12,13 @@ class WeatherCell: UITableViewCell {
     
     @IBOutlet weak var cityNameLabel: UILabel!
     @IBOutlet weak var temperatureLabel: UILabel!
-    @IBOutlet weak var weatherLabel: UILabel!
     @IBOutlet weak var weatherDescriptionLabel: UILabel!
     
     var currentWeather: WeatherItem? {
         didSet {
             cityNameLabel.text = currentWeather?.name
             temperatureLabel.text = currentWeather?.main.temp.description
-            weatherLabel.text = currentWeather?.weather.first?.main
-            weatherDescriptionLabel.text = currentWeather?.weather.first?.description
+            weatherDescriptionLabel.text = currentWeather?.weather.first?.description.capitalized
         }
     }
 }

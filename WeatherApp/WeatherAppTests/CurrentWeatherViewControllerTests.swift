@@ -36,7 +36,6 @@ class CurrentWeatherViewControllerTests: XCTestCase {
         let cell = sut.tableView.cell(at: 0) as? WeatherCell
 
         XCTAssertEqual(cell?.temperatureLabel.text, sut.currentWeather?.main.temp.description)
-        XCTAssertEqual(cell?.weatherLabel.text, sut.currentWeather?.weather.first?.main)
         XCTAssertEqual(cell?.weatherDescriptionLabel.text, sut.currentWeather?.weather.first?.description)
     }
     

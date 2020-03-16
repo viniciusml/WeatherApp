@@ -11,21 +11,7 @@ import CoreLocation
 
 typealias Coordinate = CLLocationCoordinate2D
 
-protocol UserLocation {
-    var coordinate: Coordinate { get }
-}
-
 extension CLLocation: UserLocation { }
-
-enum LocationError: Error {
-    case cannotBeLocated
-}
-
-typealias LocationResult = Result<UserLocation, LocationError>
-
-protocol LocationAdapter {
-    func getCurrentLocation(completion: @escaping (LocationResult) -> Void)
-}
 
 class LocationService: NSObject, LocationAdapter {
         

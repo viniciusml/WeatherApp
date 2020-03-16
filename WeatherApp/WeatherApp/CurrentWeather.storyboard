@@ -16,58 +16,64 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lRA-e0-T0P">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="60" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lRA-e0-T0P">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" red="0.82704901695251465" green="0.95349448919296265" blue="0.95461088418960571" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="separatorColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <label key="tableHeaderView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AND-LR-tWS">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <label key="tableHeaderView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="60" id="AND-LR-tWS">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="25"/>
-                                    <nil key="textColor"/>
+                                    <fontDescription key="fontDescription" name="GeezaPro-Bold" family="Geeza Pro" pointSize="30"/>
+                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="191" id="mcb-iU-R1i" customClass="WeatherCell" customModule="WeatherApp" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="72" width="414" height="191"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="283" id="mcb-iU-R1i" customClass="WeatherCell" customModule="WeatherApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="88" width="414" height="283"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mcb-iU-R1i" id="zEt-XJ-2m1">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="191"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="283"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" spacing="98" translatesAutoresizingMaskIntoConstraints="NO" id="oWm-dO-kj8">
-                                                    <rect key="frame" x="20" y="11" width="374" height="169"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="oWm-dO-kj8">
+                                                    <rect key="frame" x="30" y="11" width="354" height="261"/>
                                                     <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="49" translatesAutoresizingMaskIntoConstraints="NO" id="0dv-dV-f3x">
-                                                            <rect key="frame" x="0.0" y="0.0" width="168" height="169"/>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" spacing="35" translatesAutoresizingMaskIntoConstraints="NO" id="0dv-dV-f3x">
+                                                            <rect key="frame" x="0.0" y="0.0" width="180.5" height="261"/>
                                                             <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Temperature" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0XZ-hr-XRf">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="97.5" height="99.5"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                    <nil key="textColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="City Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oTd-iW-p4c" userLabel="name">
-                                                                    <rect key="frame" x="0.0" y="148.5" width="80" height="20.5"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                    <nil key="textColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
+                                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="tfr-7z-QKQ">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="162.5" height="261"/>
+                                                                    <subviews>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Temperature" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0XZ-hr-XRf">
+                                                                            <rect key="frame" x="0.0" y="118" width="134.5" height="25"/>
+                                                                            <fontDescription key="fontDescription" name="Galvji" family="Galvji" pointSize="21"/>
+                                                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <nil key="highlightedColor"/>
+                                                                        </label>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="°C" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2xe-pK-1Bk" userLabel="Unit">
+                                                                            <rect key="frame" x="139.5" y="118" width="23" height="25"/>
+                                                                            <fontDescription key="fontDescription" name="Galvji" family="Galvji" pointSize="21"/>
+                                                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <nil key="highlightedColor"/>
+                                                                        </label>
+                                                                    </subviews>
+                                                                </stackView>
                                                             </subviews>
                                                         </stackView>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="sSa-gy-YNe">
-                                                            <rect key="frame" x="266" y="0.0" width="108" height="169"/>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="sSa-gy-YNe">
+                                                            <rect key="frame" x="210.5" y="0.0" width="143.5" height="261"/>
                                                             <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Weather Main" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aWa-BD-mOx">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="108" height="108.5"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                    <nil key="textColor"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="City Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oTd-iW-p4c" userLabel="name">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="107" height="115.5"/>
+                                                                    <fontDescription key="fontDescription" name="Galvji" family="Galvji" pointSize="21"/>
+                                                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Weather Desc" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0pi-Yf-DU8">
-                                                                    <rect key="frame" x="0.0" y="148.5" width="108" height="20.5"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                    <nil key="textColor"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Weather Desc" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0pi-Yf-DU8">
+                                                                    <rect key="frame" x="0.0" y="145.5" width="143.5" height="115.5"/>
+                                                                    <fontDescription key="fontDescription" name="Galvji" family="Galvji" pointSize="21"/>
+                                                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
@@ -76,8 +82,8 @@
                                                 </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailingMargin" secondItem="oWm-dO-kj8" secondAttribute="trailing" id="Bob-Xc-Fqf"/>
-                                                <constraint firstItem="oWm-dO-kj8" firstAttribute="leading" secondItem="zEt-XJ-2m1" secondAttribute="leadingMargin" id="Hl6-gm-9jN"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="oWm-dO-kj8" secondAttribute="trailing" constant="10" id="Bob-Xc-Fqf"/>
+                                                <constraint firstItem="oWm-dO-kj8" firstAttribute="leading" secondItem="zEt-XJ-2m1" secondAttribute="leadingMargin" constant="10" id="Hl6-gm-9jN"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="oWm-dO-kj8" secondAttribute="bottom" id="YBK-DH-R60"/>
                                                 <constraint firstItem="oWm-dO-kj8" firstAttribute="top" secondItem="zEt-XJ-2m1" secondAttribute="topMargin" id="o5Q-On-bgU"/>
                                             </constraints>
@@ -87,7 +93,6 @@
                                             <outlet property="cityNameLabel" destination="oTd-iW-p4c" id="nMb-as-FJl"/>
                                             <outlet property="temperatureLabel" destination="0XZ-hr-XRf" id="ICw-jB-59k"/>
                                             <outlet property="weatherDescriptionLabel" destination="0pi-Yf-DU8" id="m10-yT-enx"/>
-                                            <outlet property="weatherLabel" destination="aWa-BD-mOx" id="QKx-Vw-ad9"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -99,9 +104,9 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="lRA-e0-T0P" firstAttribute="top" secondItem="jCJ-B6-8WU" secondAttribute="top" id="NLs-Rm-rpG"/>
+                            <constraint firstItem="lRA-e0-T0P" firstAttribute="top" secondItem="aR6-cZ-wwI" secondAttribute="top" id="NLs-Rm-rpG"/>
                             <constraint firstItem="jCJ-B6-8WU" firstAttribute="trailing" secondItem="lRA-e0-T0P" secondAttribute="trailing" id="YMH-9R-K8A"/>
-                            <constraint firstItem="jCJ-B6-8WU" firstAttribute="bottom" secondItem="lRA-e0-T0P" secondAttribute="bottom" id="aqN-NI-VZh"/>
+                            <constraint firstAttribute="bottom" secondItem="lRA-e0-T0P" secondAttribute="bottom" id="aqN-NI-VZh"/>
                             <constraint firstItem="lRA-e0-T0P" firstAttribute="leading" secondItem="jCJ-B6-8WU" secondAttribute="leading" id="r63-BI-EaN"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jCJ-B6-8WU"/>

@@ -29,7 +29,7 @@ class WeatherLoaderEndToEndTests: XCTestCase {
     // MARK: - Helpers
     
     private func getCurrentWeather() -> WeatherResult? {
-        let url = URL(string: "http://api.openweathermap.org/data/2.5/weather")!
+        let url = "http://api.openweathermap.org/data/2.5/weather"
         let client = HTTPClient()
         let loader = WeatherLoader(url: url, client: client)
         
@@ -37,7 +37,7 @@ class WeatherLoaderEndToEndTests: XCTestCase {
         
         var receivedResult: WeatherResult?
         
-        loader.loadCurrentWeather { result in
+        loader.loadCurrentWeather(parameters: Coordinate(latitude: 35, longitude: 139)) { result in
             receivedResult = result
             exp.fulfill()
         }

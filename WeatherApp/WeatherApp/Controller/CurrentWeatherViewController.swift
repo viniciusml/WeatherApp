@@ -49,6 +49,7 @@ class CurrentWeatherViewController: UIViewController {
             
             switch result {
             case let .success(location):
+                self.locations = []
                 self.locations.append(location)
             case let .failure(error):
                 print(error)
