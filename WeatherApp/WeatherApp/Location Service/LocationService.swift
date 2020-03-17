@@ -22,7 +22,7 @@ class LocationService: NSObject, LocationAdapter {
         self.provider = provider
         super.init()
         self.provider.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        self.provider.locationManagerDelegate = self
+        self.provider.locationProviderDelegate = self
     }
     
     func getCurrentLocation(completion: @escaping (LocationResult) -> Void) {
@@ -36,6 +36,20 @@ class LocationService: NSObject, LocationAdapter {
     }
 }
 
+extension LocationService: LocationProviderDelegate {
+    func locationManager(_ manager: LocationProvider, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            currentLocation?(.success(location))
+        } else {
+            currentLocation?(.failure(.cannotBeLocated))
+        }
+    }
+    
+    func locationManager(_ manager: LocationProvider, didFailWithError error: Error) {
+        currentLocation?(.failure(.cannotBeLocated))
+    }
+}
+
 extension LocationService: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse || status == .authorizedAlways {
@@ -44,14 +58,10 @@ extension LocationService: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last {
-            currentLocation?(.success(location))
-        } else {
-            currentLocation?(.failure(.cannotBeLocated))
-        }
+        self.locationManager(manager, didUpdateLocations: locations)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        currentLocation?(.failure(.cannotBeLocated))
+        self.locationManager(manager, didFailWithError: error)
     }
 }
