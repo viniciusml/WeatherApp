@@ -18,11 +18,11 @@ class LocationService: NSObject, LocationAdapter {
     var provider: LocationProvider
     private var currentLocation: ((LocationResult) -> Void)?
     
-    init(provider: LocationProvider) {
+    init(provider: LocationProvider = CLLocationManager()) {
         self.provider = provider
         super.init()
         self.provider.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        self.provider.locationProviderDelegate = self
+        self.provider.locationManagerDelegate = self
     }
     
     func getCurrentLocation(completion: @escaping (LocationResult) -> Void) {
@@ -36,20 +36,6 @@ class LocationService: NSObject, LocationAdapter {
     }
 }
 
-extension LocationService: LocationProviderDelegate {
-    func locationManager(_ manager: LocationProvider, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last {
-            currentLocation?(.success(location))
-        } else {
-            currentLocation?(.failure(.cannotBeLocated))
-        }
-    }
-    
-    func locationManager(_ manager: LocationProvider, didFailWithError error: Error) {
-        currentLocation?(.failure(.cannotBeLocated))
-    }
-}
-
 extension LocationService: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse || status == .authorizedAlways {
@@ -58,10 +44,14 @@ extension LocationService: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        self.locationManager(manager, didUpdateLocations: locations)
+        if let location = locations.last {
+            currentLocation?(.success(location))
+        } else {
+            currentLocation?(.failure(.cannotBeLocated))
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        self.locationManager(manager, didFailWithError: error)
+        currentLocation?(.failure(.cannotBeLocated))
     }
 }

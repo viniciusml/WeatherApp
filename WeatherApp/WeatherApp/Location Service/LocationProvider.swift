@@ -11,15 +11,10 @@ import CoreLocation
 
 protocol LocationProvider {
     var isAuthorized: Bool { get }
-    var locationProviderDelegate: LocationProviderDelegate? { get set }
+    var locationManagerDelegate: CLLocationManagerDelegate? { get set }
     var desiredAccuracy: CLLocationAccuracy { get set }
     func requestWhenInUseAuthorization()
     func requestLocation()
-}
-
-protocol LocationProviderDelegate: class {
-    func locationManager(_ manager: LocationProvider, didUpdateLocations locations: [CLLocation])
-    func locationManager(_ manager: LocationProvider, didFailWithError error: Error)
 }
 
 extension CLLocationManager: LocationProvider {
@@ -28,8 +23,8 @@ extension CLLocationManager: LocationProvider {
         return CLLocationManager.authorizationStatus() == .authorizedWhenInUse
     }
 
-    var locationProviderDelegate: LocationProviderDelegate? {
-        get { return delegate as! LocationProviderDelegate? }
-        set { delegate = newValue as! CLLocationManagerDelegate? }
+    var locationManagerDelegate: CLLocationManagerDelegate? {
+        get { return delegate }
+        set { delegate = newValue }
     }
 }

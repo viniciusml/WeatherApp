@@ -11,7 +11,7 @@ import CoreLocation
 
 class LocationProviderMock: LocationProvider {
     
-    var locationProviderDelegate: LocationProviderDelegate?
+    var locationManagerDelegate: CLLocationManagerDelegate?
 
     var desiredAccuracy: CLLocationAccuracy = kCLLocationAccuracyHundredMeters
     
@@ -31,7 +31,7 @@ class LocationProviderMock: LocationProvider {
     
     func requestLocation() {
         locationRequests.append(true)
-        locationProviderDelegate?.locationManager(self, didUpdateLocations: locations)
+        locationManagerDelegate?.locationManager?(CLLocationManager(), didUpdateLocations: locations)
     }
     
     private func map(_ coordinate: Coordinate?) -> [CLLocation] {
