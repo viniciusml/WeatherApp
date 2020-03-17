@@ -18,7 +18,11 @@ class LocationProviderMock: LocationProvider {
     var isAuthorized: Bool = false
     var locationRequests = [Bool]()
     var authorizationRequests = [Bool]()
-    var locationToReturn = [CLLocation]()
+    var locationToReturn: Coordinate? = nil
+    
+    private var locations: [CLLocation] {
+        return map(locationToReturn)
+    }
     
     func requestWhenInUseAuthorization() {
         authorizationRequests.append(true)
@@ -27,7 +31,11 @@ class LocationProviderMock: LocationProvider {
     
     func requestLocation() {
         locationRequests.append(true)
-//        guard let location = locationToReturn?() else { return }
-        locationProviderDelegate?.locationManager(self, didUpdateLocations: locationToReturn)
+        locationProviderDelegate?.locationManager(self, didUpdateLocations: locations)
+    }
+    
+    private func map(_ coordinate: Coordinate?) -> [CLLocation] {
+        guard let coordinate = coordinate else { return [] }
+        return [CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)]
     }
 }

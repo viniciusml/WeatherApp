@@ -100,6 +100,28 @@ class LocationServiceTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_service_getCurrentLocation_deliversLocationOnUpdatingLocationSuccess() {
+        let provider = LocationProviderMock()
+        let sut = LocationService(provider: provider)
+        let expectedLocation = Coordinate(latitude: 39, longitude: 135)
+
+        let exp = expectation(description: "Wait for request completion")
+        provider.isAuthorized = true
+        provider.locationToReturn = Coordinate(latitude: 39, longitude: 135)
+        
+        sut.getCurrentLocation { result in
+            switch result {
+            case let .success(receivedLocations):
+                XCTAssertEqual(expectedLocation.latitude, receivedLocations.coordinate.latitude)
+                XCTAssertEqual(expectedLocation.longitude, receivedLocations.coordinate.longitude)
+            default:
+                XCTFail("Expected failure, received \(result) intead.")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT() -> (sut: LocationService, provider: LocationProviderMock) {
