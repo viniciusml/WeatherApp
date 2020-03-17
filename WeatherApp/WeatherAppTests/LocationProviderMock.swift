@@ -16,8 +16,10 @@ class LocationProviderMock: LocationProvider {
     
     var isAuthorized: Bool = false
     var locationRequests = [Bool]()
+    var authorizationRequests = [Bool]()
     
     func requestWhenInUseAuthorization() {
+        authorizationRequests.append(true)
         isAuthorized.toggle()
     }
     

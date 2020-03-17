@@ -58,7 +58,7 @@ class LocationServiceTests: XCTestCase {
         provider.isAuthorized = true
         sut.getCurrentLocation { _ in }
         
-        XCTAssertTrue(provider.isAuthorized)
+        XCTAssertEqual(provider.authorizationRequests, [])
     }
     
     func test_service_getCurrentLocation_requestsLocationWhenAuthorized() {
