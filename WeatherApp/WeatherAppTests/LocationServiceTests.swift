@@ -49,7 +49,7 @@ class LocationServiceTests: XCTestCase {
         
         sut.getCurrentLocation { _ in }
         
-        XCTAssertTrue(provider.isAuthorized)
+        XCTAssertEqual(provider.authorizationRequests, [true])
     }
     
     func test_service_getCurrentLocation_doesNotRequestAuthorizationWhenPreviouslyAuthorized() {
