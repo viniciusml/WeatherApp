@@ -39,7 +39,7 @@ class LocationServiceTests: XCTestCase {
             case let .failure(error):
                 XCTAssertEqual(error, .cannotBeLocated)
             default:
-                XCTFail("Expected error, but got success instead")
+                XCTFail("Expected error, but got \(result) instead")
             }
         }
     }
