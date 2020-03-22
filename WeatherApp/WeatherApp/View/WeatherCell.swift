@@ -10,9 +10,20 @@ import UIKit
 
 class WeatherCell: UITableViewCell {
     
-    @IBOutlet weak var cityNameLabel: UILabel!
-    @IBOutlet weak var temperatureLabel: UILabel!
-    @IBOutlet weak var weatherDescriptionLabel: UILabel!
+    var cityNameLabel: UILabel = {
+        let label = UILabel()
+        return label
+    }()
+    
+    var temperatureLabel: UILabel = {
+        let label = UILabel()
+        return label
+    }()
+    
+    var weatherDescriptionLabel: UILabel = {
+        let label = UILabel()
+        return label
+    }()
     
     var currentWeather: WeatherItem? {
         didSet {
@@ -20,5 +31,24 @@ class WeatherCell: UITableViewCell {
             temperatureLabel.text = currentWeather?.main.temp.description
             weatherDescriptionLabel.text = currentWeather?.weather.first?.description.capitalized
         }
+    }
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupViews()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupViews() {
+        
+        addSubview(temperatureLabel)
+        temperatureLabel.anchor(top: self.topAnchor, leading: self.leadingAnchor, bottom: nil, trailing: nil, size: CGSize(width: 80, height: 80))
+        
+        let hStack = HorizontalStackView(arrangedSubviews: [cityNameLabel, weatherDescriptionLabel], alignment: .fill)
+        addSubview(hStack)
+        hStack.anchor(top: temperatureLabel.bottomAnchor, leading: self.leadingAnchor, bottom: self.bottomAnchor, trailing: self.trailingAnchor)
     }
 }

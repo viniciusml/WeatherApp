@@ -11,8 +11,20 @@ import CoreLocation
 
 class CurrentWeatherViewController: UIViewController {
     
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var headerLabel: UILabel!
+    lazy var tableView: UITableView = {
+        let tv = UITableView()
+        tv.delegate = self
+        tv.dataSource = self
+        tv.register(WeatherCell.self)
+        return tv
+    }()
+    
+    var headerLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .white
+        label.text = "Weather App"
+        return label
+    }()
     
     let client = HTTPClient()
     var loader: WeatherLoader {
@@ -30,7 +42,7 @@ class CurrentWeatherViewController: UIViewController {
         }
     }
     
-    private(set) var currentWeather: WeatherItem? {
+    var currentWeather: WeatherItem? {
         didSet {
             tableView.reloadData()
         }
@@ -39,7 +51,13 @@ class CurrentWeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        headerLabel.text = "Weather App"
+        view.addSubview(headerLabel)
+        view.addSubview(tableView)
+        
+        headerLabel.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, size: CGSize(width: 0, height: 80))
+        tableView.anchor(top: headerLabel.bottomAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
+        tableView.separatorStyle = .none
+        
         getLocation()
     }
     
@@ -80,9 +98,39 @@ extension CurrentWeatherViewController: UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! WeatherCell
-        cell.currentWeather = currentWeather
+        if let cell = tableView.dequeueReusableCell(WeatherCell.self) {
+            cell.currentWeather = currentWeather
+            return cell
+        }
         
-        return cell
+        return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 300
     }
 }
+
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+struct CurrentWeatherViewRepresentable: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let vc = CurrentWeatherViewController()
+        let weather = WeatherItem(coord: Coord(lon: 200.00, lat: 200.00), weather: [Weather(main: "Weather", description: "description")], main: Main(temp: 200.00), name: "City Name")
+        vc.currentWeather = weather
+        vc.tableView.reloadData()
+        return vc.view
+    }
+    
+    func updateUIView(_ view: UIView, context: Context) {
+        
+    }
+}
+
+@available(iOS 13.0, *)
+struct CurrentWeatherController_Preview: PreviewProvider {
+    static var previews: some View {
+        CurrentWeatherViewRepresentable()
+    }
+}
+#endif

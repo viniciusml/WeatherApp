@@ -27,7 +27,7 @@ class CurrentWeatherViewControllerTests: XCTestCase {
 
         let cell = sut.tableView.cell(at: 0) as? WeatherCell
 
-        XCTAssertEqual(cell?.cityNameLabel?.text, sut.currentWeather?.name)
+        XCTAssertEqual(cell?.cityNameLabel.text, sut.currentWeather?.name)
     }
     
     func test_withLocationFetched_displaysOptionTemperatureAndWeather() {
@@ -42,10 +42,9 @@ class CurrentWeatherViewControllerTests: XCTestCase {
     // MARK: - Helpers
     
     private func makeSUT() -> CurrentWeatherViewController {
-        let storyboard = UIStoryboard(name: "CurrentWeather", bundle: nil)
-        let controller = storyboard.instantiateInitialViewController()
-        controller?.loadViewIfNeeded()
-        return controller as! CurrentWeatherViewController
+        let sut = CurrentWeatherViewController()
+        _ = sut.view
+        return sut
     }
 }
 
