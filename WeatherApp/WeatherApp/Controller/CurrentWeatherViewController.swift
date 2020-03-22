@@ -4,7 +4,7 @@
 //
 //  Created by Vinicius Moreira Leal on 16/03/2020.
 //  Copyright © 2020 Vinicius Moreira Leal. All rights reserved.
-//
+//  Design inspiration:  https://www.behance.net/gallery/90366995/Weather-App?tracking_source=search%7Cweather%20app
 
 import UIKit
 import CoreLocation
