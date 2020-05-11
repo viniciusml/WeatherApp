@@ -202,6 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				8F6A3B68241F03A10021D3A5 /* CurrentWeatherViewController.swift */,
+				8F6A3B76241F1F990021D3A5 /* UIViewController+Alert.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -241,7 +242,6 @@
 				8F6A3B73241F1DD80021D3A5 /* Model */,
 				8F6A3B74241F1DE10021D3A5 /* View */,
 				8F6A3B75241F1DEB0021D3A5 /* Controller */,
-				8F6A3B76241F1F990021D3A5 /* UIViewController+Alert.swift */,
 			);
 			path = WeatherApp;
 			sourceTree = "<group>";
