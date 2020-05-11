@@ -10,11 +10,6 @@ import UIKit
 
 class WeatherCell: UICollectionViewCell {
     
-    var cityNameLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
-    
     var temperatureLabel: UILabel = {
         let label = UILabel()
         return label
@@ -27,7 +22,6 @@ class WeatherCell: UICollectionViewCell {
     
     var currentWeather: WeatherItem? {
         didSet {
-            cityNameLabel.text = currentWeather?.name
             temperatureLabel.text = currentWeather?.main.temp.description
             weatherDescriptionLabel.text = currentWeather?.weather.first?.description.capitalized
         }
@@ -35,20 +29,35 @@ class WeatherCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViews()
+        setupView()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func setupViews() {
-        
+}
+
+extension WeatherCell: CodeView {
+
+    func buildViewHierarchy() {
         addSubview(temperatureLabel)
-        temperatureLabel.anchor(top: self.topAnchor, leading: self.leadingAnchor, bottom: nil, trailing: nil, size: CGSize(width: 80, height: 80))
-        
-        let hStack = HorizontalStackView(arrangedSubviews: [cityNameLabel, weatherDescriptionLabel], alignment: .fill)
-        addSubview(hStack)
-        hStack.anchor(top: temperatureLabel.bottomAnchor, leading: self.leadingAnchor, bottom: self.bottomAnchor, trailing: self.trailingAnchor)
+        addSubview(weatherDescriptionLabel)
+    }
+
+    func setupConstraints() {
+        temperatureLabel.anchor(
+            top: self.topAnchor,
+            leading: self.leadingAnchor,
+            bottom: nil,
+            trailing: nil,
+            padding: UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 0),
+            size: CGSize(width: 80, height: 80))
+
+        weatherDescriptionLabel.anchor(
+            top: nil,
+            leading: nil,
+            bottom: self.bottomAnchor,
+            trailing: self.trailingAnchor,
+            padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 10))
     }
 }
