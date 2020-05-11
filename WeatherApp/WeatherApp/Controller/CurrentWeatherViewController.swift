@@ -9,6 +9,10 @@
 import UIKit
 import CoreLocation
 
+extension UIColor {
+    static let background = UIColor(red: 247/255, green: 247/255, blue: 247/255, alpha: 1.0)
+}
+
 class CurrentWeatherViewController: UIViewController {
     
     lazy var tableView: UITableView = {
@@ -34,7 +38,7 @@ class CurrentWeatherViewController: UIViewController {
     let provider = CLLocationManager()
     var service: LocationService?
     
-    private(set) var locations = [UserLocation]() {
+    var locations = [UserLocation]() {
         didSet {
             if let coordinate = locations.first?.coordinate {
                 getWeather(for: coordinate)
@@ -117,13 +121,14 @@ struct CurrentWeatherViewRepresentable: UIViewRepresentable {
     func makeUIView(context: Context) -> UIView {
         let vc = CurrentWeatherViewController()
         let weather = WeatherItem(coord: Coord(lon: 200.00, lat: 200.00), weather: [Weather(main: "Weather", description: "description")], main: Main(temp: 200.00), name: "City Name")
+        vc.locations = [CLLocation(latitude: 200, longitude: 200)]
         vc.currentWeather = weather
         vc.tableView.reloadData()
         return vc.view
     }
-    
+
     func updateUIView(_ view: UIView, context: Context) {
-        
+
     }
 }
 
