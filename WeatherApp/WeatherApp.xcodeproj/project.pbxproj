@@ -20,6 +20,7 @@
 		8F6A3B72241F1D9C0021D3A5 /* LocationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6A3B71241F1D9C0021D3A5 /* LocationAdapter.swift */; };
 		8F6A3B77241F1F990021D3A5 /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6A3B76241F1F990021D3A5 /* UIViewController+Alert.swift */; };
 		8F89A9712469F193008BD0B5 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F89A9702469F193008BD0B5 /* Constants.swift */; };
+		8F89A9732469F1D1008BD0B5 /* CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F89A9722469F1D1008BD0B5 /* CodeView.swift */; };
 		8F9EA1CA241CF5A0009D6CD9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9EA1C9241CF5A0009D6CD9 /* AppDelegate.swift */; };
 		8F9EA1D3241CF5A2009D6CD9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F9EA1D2241CF5A2009D6CD9 /* Assets.xcassets */; };
 		8F9EA1D6241CF5A2009D6CD9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F9EA1D4241CF5A2009D6CD9 /* LaunchScreen.storyboard */; };
@@ -69,6 +70,7 @@
 		8F6A3B71241F1D9C0021D3A5 /* LocationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationAdapter.swift; sourceTree = "<group>"; };
 		8F6A3B76241F1F990021D3A5 /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		8F89A9702469F193008BD0B5 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		8F89A9722469F1D1008BD0B5 /* CodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeView.swift; sourceTree = "<group>"; };
 		8F9EA1C6241CF5A0009D6CD9 /* WeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F9EA1C9241CF5A0009D6CD9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8F9EA1D2241CF5A2009D6CD9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 			children = (
 				8F65521324269B08006198BA /* Extensions.swift */,
 				8F89A9702469F193008BD0B5 /* Constants.swift */,
+				8F89A9722469F1D1008BD0B5 /* CodeView.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -494,6 +497,7 @@
 				8F6A3B77241F1F990021D3A5 /* UIViewController+Alert.swift in Sources */,
 				8F9EA1CA241CF5A0009D6CD9 /* AppDelegate.swift in Sources */,
 				8F6A3B53241E87990021D3A5 /* LocationProvider.swift in Sources */,
+				8F89A9732469F1D1008BD0B5 /* CodeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
