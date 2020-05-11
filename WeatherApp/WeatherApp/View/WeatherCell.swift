@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WeatherCell: UITableViewCell {
+class WeatherCell: UICollectionViewCell {
     
     var cityNameLabel: UILabel = {
         let label = UILabel()
@@ -33,8 +33,8 @@ class WeatherCell: UITableViewCell {
         }
     }
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupViews()
     }
 

@@ -10,17 +10,18 @@ import UIKit
 import CoreLocation
 
 extension UIColor {
-    static let background = UIColor(red: 247/255, green: 247/255, blue: 247/255, alpha: 1.0)
+    static let appBackground = UIColor(red: 247/255, green: 247/255, blue: 247/255, alpha: 1.0)
 }
 
 class CurrentWeatherViewController: UIViewController {
     
-    lazy var tableView: UITableView = {
-        let tv = UITableView()
-        tv.delegate = self
-        tv.dataSource = self
-        tv.register(WeatherCell.self)
-        return tv
+    lazy var collectionView: UICollectionView = {
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        cv.backgroundColor = .appBackground
+        cv.delegate = self
+        cv.dataSource = self
+        cv.register(WeatherCell.self)
+        return cv
     }()
     
     var headerLabel: UILabel = {
@@ -48,20 +49,20 @@ class CurrentWeatherViewController: UIViewController {
     
     var currentWeather: WeatherItem? {
         didSet {
-            tableView.reloadData()
+            collectionView.reloadData()
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        view.backgroundColor = .appBackground
         view.addSubview(headerLabel)
-        view.addSubview(tableView)
+        view.addSubview(collectionView)
         
         headerLabel.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, size: CGSize(width: 0, height: 80))
-        tableView.anchor(top: headerLabel.bottomAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
-        tableView.separatorStyle = .none
-        
+        collectionView.anchor(top: headerLabel.bottomAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
+
         getLocation()
     }
     
@@ -95,23 +96,16 @@ class CurrentWeatherViewController: UIViewController {
     }
 }
 
-extension CurrentWeatherViewController: UITableViewDataSource, UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return locations.count
+extension CurrentWeatherViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        locations.count
     }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(WeatherCell.self) {
-            cell.currentWeather = currentWeather
-            return cell
-        }
-        
-        return UITableViewCell()
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 300
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(WeatherCell.self, for: indexPath)!
+        cell.currentWeather = currentWeather
+        return cell
     }
 }
 
@@ -123,7 +117,7 @@ struct CurrentWeatherViewRepresentable: UIViewRepresentable {
         let weather = WeatherItem(coord: Coord(lon: 200.00, lat: 200.00), weather: [Weather(main: "Weather", description: "description")], main: Main(temp: 200.00), name: "City Name")
         vc.locations = [CLLocation(latitude: 200, longitude: 200)]
         vc.currentWeather = weather
-        vc.tableView.reloadData()
+        vc.collectionView.reloadData()
         return vc.view
     }
 

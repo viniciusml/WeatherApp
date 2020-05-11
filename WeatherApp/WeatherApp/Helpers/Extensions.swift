@@ -8,16 +8,16 @@
 
 import UIKit
 
-// UITableView Extensions
-extension UITableView {
-    func register(_ type: UITableViewCell.Type) {
+// UICollectionView Extensions
+extension UICollectionView {
+    func register(_ type: UICollectionViewCell.Type) {
         let className = String(describing: type)
-        register(type, forCellReuseIdentifier: className)
+        register(type, forCellWithReuseIdentifier: className)
     }
     
-    func dequeueReusableCell<T>(_ type: T.Type) -> T? {
+    func dequeueReusableCell<T>(_ type: T.Type, for indexPath: IndexPath) -> T? {
         let className = String(describing: type)
-        return dequeueReusableCell(withIdentifier: className) as? T
+        return dequeueReusableCell(withReuseIdentifier: className, for: indexPath) as? T
     }
 }
 
