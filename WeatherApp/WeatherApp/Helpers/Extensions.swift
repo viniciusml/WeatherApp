@@ -8,6 +8,21 @@
 
 import UIKit
 
+/// Perform an immediate `transform` of an instance of value type `subject`.
+///
+/// - Parameters:
+///     - subject: The subject to transform.
+///     - transform: The transform to perform.
+///
+/// - Throws: Any error that was thrown inside `transform`.
+///
+/// - Returns: A transformed `subject`.
+internal func make<Subject>(_ subject: Subject, _ transform: (_ subject: inout Subject) throws -> Void) rethrows -> Subject {
+    var subject = subject
+    try transform(&subject)
+    return subject
+}
+
 // UICollectionView Extensions
 extension UICollectionView {
     func register(_ type: UICollectionViewCell.Type) {
