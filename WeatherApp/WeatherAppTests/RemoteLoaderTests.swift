@@ -9,7 +9,7 @@
 import XCTest
 @testable import WeatherApp
 
-class CurrentWeatherLoaderTests: XCTestCase {
+class RemoteLoaderTests: XCTestCase {
     
     let itemJSON: [String: Any] = [
         "coord": [ "lon": 139,"lat": 35 ],
