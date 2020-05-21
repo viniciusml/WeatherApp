@@ -27,7 +27,8 @@ class WeatherLoader {
     func loadCurrentWeather(parameters: Coordinate? = nil, completion: @escaping (WeatherResult) -> Void) {
         client.load(parameters: parameters, from: url) { result in
             switch result {
-            case let .success(data, response):
+            case let .success(value):
+                let (data, response) = value
                 if response.statusCode == 200, let item = try? JSONDecoder().decode(WeatherItem.self, from: data) {
                     completion(.success(item))
                 } else {
