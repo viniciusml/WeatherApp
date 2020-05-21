@@ -39,8 +39,8 @@ class CurrentWeatherViewController: UIViewController {
         view = mainView
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
         getLocation()
     }
