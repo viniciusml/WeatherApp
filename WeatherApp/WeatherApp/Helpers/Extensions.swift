@@ -17,7 +17,7 @@ import UIKit
 /// - Throws: Any error that was thrown inside `transform`.
 ///
 /// - Returns: A transformed `subject`.
-internal func make<Subject>(_ subject: Subject, _ transform: (_ subject: inout Subject) throws -> Void) rethrows -> Subject {
+func make<Subject>(_ subject: Subject, _ transform: (_ subject: inout Subject) throws -> Void) rethrows -> Subject {
     var subject = subject
     try transform(&subject)
     return subject
