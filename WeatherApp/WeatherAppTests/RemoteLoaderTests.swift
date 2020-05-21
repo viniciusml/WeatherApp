@@ -63,7 +63,7 @@ class CurrentWeatherLoaderTests: XCTestCase {
         let url = "http:a-given-url.com"
         let (sut, client) = makeSUT(url: url)
         
-        sut.loadCurrentWeather { _ in }
+        sut.load(WeatherItem.self) { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url])
     }
@@ -72,8 +72,8 @@ class CurrentWeatherLoaderTests: XCTestCase {
         let url = "http:a-given-url.com"
         let (sut, client) = makeSUT(url: url)
         
-        sut.loadCurrentWeather { _ in }
-        sut.loadCurrentWeather { _ in }
+        sut.load(WeatherItem.self) { _ in }
+        sut.load(WeatherItem.self) { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url, url])
     }
@@ -124,7 +124,7 @@ class CurrentWeatherLoaderTests: XCTestCase {
         let (sut, client) = makeSUT()
         
         let coordinates = Coordinate(latitude: 55.75578600, longitude: 37.61763300)
-        sut.loadCurrentWeather(parameters: coordinates) { _ in }
+        sut.load(WeatherItem.self, parameters: coordinates) { _ in }
         
         XCTAssertEqual(client.receivedParameters?.latitude, coordinates.latitude)
         XCTAssertEqual(client.receivedParameters?.longitude, coordinates.longitude)
@@ -132,15 +132,15 @@ class CurrentWeatherLoaderTests: XCTestCase {
     
     // MARK: - Helpers
         
-    private func makeSUT(url: String = "http:a-given-url.com") -> (sut: WeatherLoader, client: HTTPClientSpy) {
+    private func makeSUT(url: String = "http:a-given-url.com") -> (sut: RemoteLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
-        let sut = WeatherLoader(url: url, client: client)
+        let sut = RemoteLoader(url: url, client: client)
         return (sut, client)
     }
     
-    private func expect(_ sut: WeatherLoader, toCompleteWith result: WeatherResult, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+    private func expect(_ sut: RemoteLoader, toCompleteWith result: WeatherResult, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
         var capturedResults = [WeatherResult]()
-        sut.loadCurrentWeather { capturedResults.append($0) }
+        sut.load(WeatherItem.self) { capturedResults.append($0) }
         
         action()
         

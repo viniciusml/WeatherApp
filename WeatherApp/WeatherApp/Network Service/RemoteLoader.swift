@@ -8,9 +8,9 @@
 
 import Foundation
 
-typealias WeatherResult = Result<WeatherItem, WeatherLoader.Error>
+typealias WeatherResult = Result<WeatherItem, RemoteLoader.Error>
 
-class WeatherLoader {
+class RemoteLoader {
     let client: NetworkAdapter
     let url: String
     
@@ -24,12 +24,13 @@ class WeatherLoader {
         self.url = url
     }
     
-    func loadCurrentWeather(parameters: Coordinate? = nil, completion: @escaping (WeatherResult) -> Void) {
+    func load<T: Decodable>(_ item: T.Type, parameters: Coordinate? = nil, completion: @escaping (Result<T, Error>) -> Void) {
+
         client.load(parameters: parameters, from: url) { result in
             switch result {
             case let .success(value):
                 let (data, response) = value
-                if response.statusCode == 200, let item = try? JSONDecoder().decode(WeatherItem.self, from: data) {
+                if response.statusCode == 200, let item = try? JSONDecoder().decode(T.self, from: data) {
                     completion(.success(item))
                 } else {
                     completion(.failure(.invalidData))

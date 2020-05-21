@@ -12,8 +12,8 @@ import CoreLocation
 class CurrentWeatherViewController: UIViewController {
     
     let client = HTTPClient()
-    var loader: WeatherLoader {
-        return WeatherLoader(url: "http://api.openweathermap.org/data/2.5/weather", client: client)
+    var loader: RemoteLoader {
+        return RemoteLoader(url: "http://api.openweathermap.org/data/2.5/weather", client: client)
     }
     
     let provider = CLLocationManager()
@@ -62,7 +62,7 @@ class CurrentWeatherViewController: UIViewController {
     }
     
     func getWeather(for location: Coordinate?) {
-        loader.loadCurrentWeather(parameters: location) { [weak self] result in
+        loader.load(WeatherItem.self, parameters: location) { [weak self] result in
             guard let self = self else { return }
             
             switch result {

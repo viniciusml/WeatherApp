@@ -17,12 +17,12 @@ class HTTPClient: NetworkAdapter {
             .responseJSON { result in
                 
                 guard let response = result.response else {
-                    completion(.failure(WeatherLoader.Error.connectivity))
+                    completion(.failure(RemoteLoader.Error.connectivity))
                     return
                 }
                 
                 guard let data = result.data else {
-                    completion(.failure(WeatherLoader.Error.connectivity))
+                    completion(.failure(RemoteLoader.Error.connectivity))
                     return
                 }
                 
