@@ -111,9 +111,19 @@ class RemoteLoaderTests: XCTestCase {
         })
     }
 
+    func test_load_usesCoordinateAsParameters() {
+        let (sut, client) = makeSUT()
+
+        let coordinates = Coordinate(latitude: 55.75578600, longitude: 37.61763300)
+        sut.load(String.self, parameters: coordinates) { _ in }
+
+        XCTAssertEqual(client.receivedParameters?.latitude, coordinates.latitude)
+        XCTAssertEqual(client.receivedParameters?.longitude, coordinates.longitude)
+    }
+
     // MARK: - Weather Item Decoding Tests
     
-    func test_load_deliversItemsOn200HTTPResponseWithEmptyJSONList() {
+    func test_load_weatherItem_deliversItemsOn200HTTPResponseWithJSONList() {
         let (sut, client) = makeSUT()
         
         let item = WeatherItem(coord: Coord(lon: 139, lat: 35), weather: [Weather(main: "Clear", description: "clear sky")], main: Main(temp: 281.52), name: "Shuzenji")
@@ -122,16 +132,6 @@ class RemoteLoaderTests: XCTestCase {
             let jsonData = try! JSONSerialization.data(withJSONObject: itemJSON)
             client.complete(withStatusCode: 200, data: jsonData)
         })
-    }
-    
-    func test_load_usesCoordinateAsParameters() {
-        let (sut, client) = makeSUT()
-        
-        let coordinates = Coordinate(latitude: 55.75578600, longitude: 37.61763300)
-        sut.load(WeatherItem.self, parameters: coordinates) { _ in }
-        
-        XCTAssertEqual(client.receivedParameters?.latitude, coordinates.latitude)
-        XCTAssertEqual(client.receivedParameters?.longitude, coordinates.longitude)
     }
     
     // MARK: - Helpers
