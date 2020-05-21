@@ -80,11 +80,53 @@ class LocationServiceTests: XCTestCase {
         XCTAssertEqual(provider.locationRequests, [true, true])
     }
     
+    func test_service_getCurrentLocation_deliversErrorOnUpdatingLocationError() {
+        let (sut, provider) = makeSUT()
+
+        provider.isAuthorized = true
+
+        expect(sut, toCompleteWith: .failure(.cannotBeLocated))
+    }
+    
+    func test_service_getCurrentLocation_deliversLocationOnUpdatingLocationSuccess() {
+        let (sut, provider) = makeSUT()
+        
+        provider.isAuthorized = true
+        provider.locationToReturn = Coordinate(latitude: 39, longitude: 135)
+
+        expect(sut, toCompleteWith: .success(UserLocationMock()))
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT() -> (sut: LocationService, provider: LocationProviderMock) {
         let provider = LocationProviderMock()
         let sut = LocationService(provider: provider)
         return (sut, provider)
+    }
+    
+    private func expect(_ sut: LocationService, toCompleteWith expectedResult: LocationResult, file: StaticString = #file, line: UInt = #line) {
+        let exp = expectation(description: "Wait for request completion")
+   
+        sut.getCurrentLocation { receivedResult in
+            switch (receivedResult, expectedResult) {
+            case let (.success(receivedLocation), .success(expectedLocation)):
+                XCTAssertEqual(receivedLocation.coordinate.latitude, expectedLocation.coordinate.latitude, file: file, line: line)
+                XCTAssertEqual(receivedLocation.coordinate.longitude, expectedLocation.coordinate.longitude, file: file, line: line)
+            case let (.failure(receivedError), .failure(expectedError)):
+                XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+            default:
+                XCTFail("Expected result \(expectedResult), got \(receivedResult) instead.", file: file, line: line)
+            }
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    struct UserLocationMock: UserLocation {
+        var coordinate: Coordinate {
+            return Coordinate(latitude: 39, longitude: 135)
+        }
     }
 }

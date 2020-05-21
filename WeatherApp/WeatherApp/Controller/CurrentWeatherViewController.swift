@@ -4,15 +4,12 @@
 //
 //  Created by Vinicius Moreira Leal on 16/03/2020.
 //  Copyright © 2020 Vinicius Moreira Leal. All rights reserved.
-//
+//  Design inspiration:  https://www.behance.net/gallery/90366995/Weather-App?tracking_source=search%7Cweather%20app
 
 import UIKit
 import CoreLocation
 
 class CurrentWeatherViewController: UIViewController {
-    
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var headerLabel: UILabel!
     
     let client = HTTPClient()
     var loader: WeatherLoader {
@@ -22,24 +19,29 @@ class CurrentWeatherViewController: UIViewController {
     let provider = CLLocationManager()
     var service: LocationService?
     
-    private(set) var locations = [UserLocation]() {
+    var locations = [UserLocation]() {
         didSet {
             if let coordinate = locations.first?.coordinate {
                 getWeather(for: coordinate)
             }
         }
     }
+
+    let mainView = MainWeatherView()
     
-    private(set) var currentWeather: WeatherItem? {
+    var currentWeather: WeatherItem? {
         didSet {
-            tableView.reloadData()
+            mainView.update(locations: locations, currentWeather: currentWeather)
         }
     }
+
+    override func loadView() {
+        view = mainView
+    }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        headerLabel.text = "Weather App"
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
         getLocation()
     }
     
@@ -73,16 +75,26 @@ class CurrentWeatherViewController: UIViewController {
     }
 }
 
-extension CurrentWeatherViewController: UITableViewDataSource, UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return locations.count
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+struct CurrentWeatherViewRepresentable: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let vc = CurrentWeatherViewController()
+        let weather = WeatherItem(coord: Coord(lon: 200.00, lat: 200.00), weather: [Weather(main: "Weather", description: "description")], main: Main(temp: 200.00), name: "City Name")
+        vc.locations = [CLLocation(latitude: 200, longitude: 200)]
+        vc.currentWeather = weather
+        return vc.view
     }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! WeatherCell
-        cell.currentWeather = currentWeather
-        
-        return cell
+
+    func updateUIView(_ view: UIView, context: Context) {
+
     }
 }
+
+@available(iOS 13.0, *)
+struct CurrentWeatherController_Preview: PreviewProvider {
+    static var previews: some View {
+        CurrentWeatherViewRepresentable()
+    }
+}
+#endif

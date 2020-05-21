@@ -11,12 +11,18 @@ import CoreLocation
 
 class LocationProviderMock: LocationProvider {
     
-    var locationManagerDelegate: CLLocationManagerDelegate? = nil
+    var locationManagerDelegate: CLLocationManagerDelegate?
+
     var desiredAccuracy: CLLocationAccuracy = kCLLocationAccuracyHundredMeters
     
     var isAuthorized: Bool = false
     var locationRequests = [Bool]()
     var authorizationRequests = [Bool]()
+    var locationToReturn: Coordinate? = nil
+    
+    private var locations: [CLLocation] {
+        return map(locationToReturn)
+    }
     
     func requestWhenInUseAuthorization() {
         authorizationRequests.append(true)
@@ -25,5 +31,11 @@ class LocationProviderMock: LocationProvider {
     
     func requestLocation() {
         locationRequests.append(true)
+        locationManagerDelegate?.locationManager?(CLLocationManager(), didUpdateLocations: locations)
+    }
+    
+    private func map(_ coordinate: Coordinate?) -> [CLLocation] {
+        guard let coordinate = coordinate else { return [] }
+        return [CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)]
     }
 }

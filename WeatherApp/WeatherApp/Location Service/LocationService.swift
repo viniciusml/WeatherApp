@@ -18,7 +18,7 @@ class LocationService: NSObject, LocationAdapter {
     var provider: LocationProvider
     private var currentLocation: ((LocationResult) -> Void)?
     
-    init(provider: LocationProvider) {
+    init(provider: LocationProvider = CLLocationManager()) {
         self.provider = provider
         super.init()
         self.provider.desiredAccuracy = kCLLocationAccuracyHundredMeters
