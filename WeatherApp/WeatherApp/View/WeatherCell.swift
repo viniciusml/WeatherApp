@@ -40,6 +40,10 @@ class WeatherCell: UICollectionViewCell {
 extension WeatherCell: CodeView {
 
     func buildViewHierarchy() {
+        layer.cornerRadius = 20
+        layer.borderColor = UIColor.gray.cgColor
+        layer.borderWidth = 1.0
+
         addSubview(temperatureLabel)
         addSubview(weatherDescriptionLabel)
     }
