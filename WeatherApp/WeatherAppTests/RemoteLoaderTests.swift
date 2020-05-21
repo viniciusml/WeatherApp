@@ -51,7 +51,9 @@ class RemoteLoaderTests: XCTestCase {
           "name": "Shuzenji",
           "cod": 200
     ]
-    
+
+    // MARK: - General Tests
+
     func test_init_doesNotRequestDataFromURL() {
         let url = "http:a-given-url.com"
         let (_, client) = makeSUT(url: url)
@@ -63,35 +65,35 @@ class RemoteLoaderTests: XCTestCase {
         let url = "http:a-given-url.com"
         let (sut, client) = makeSUT(url: url)
         
-        sut.load(WeatherItem.self) { _ in }
+        sut.load(String.self) { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url])
     }
-    
+
     func test_loadsTwice_requestsDataFromURLTwice() {
         let url = "http:a-given-url.com"
         let (sut, client) = makeSUT(url: url)
-        
-        sut.load(WeatherItem.self) { _ in }
-        sut.load(WeatherItem.self) { _ in }
-        
+
+        sut.load(String.self) { _ in }
+        sut.load(String.self) { _ in }
+
         XCTAssertEqual(client.requestedURLs, [url, url])
     }
-    
+
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
-        
+
         expect(sut, toCompleteWith: .failure(.connectivity), when: {
             let clientError = NSError(domain: "Test", code: 0)
             client.complete(with: clientError)
         })
     }
-    
+
     func test_load_deliversErrorOnNon200HTTPResponse() {
         let (sut, client) = makeSUT()
-        
+
         let samples = [199, 201, 400, 300, 500]
-                
+
         samples.enumerated().forEach { index, code in
             expect(sut, toCompleteWith: .failure(.invalidData), when: {
                 let jsonData = try! JSONSerialization.data(withJSONObject: itemJSON)
@@ -99,15 +101,17 @@ class RemoteLoaderTests: XCTestCase {
             })
         }
     }
-    
+
     func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() {
         let (sut, client) = makeSUT()
-        
+
         expect(sut, toCompleteWith: .failure(.invalidData), when: {
             let invalidJSON = Data("Invalid Json".utf8)
             client.complete(withStatusCode: 200, data: invalidJSON)
         })
     }
+
+    // MARK: - Weather Item Decoding Tests
     
     func test_load_deliversItemsOn200HTTPResponseWithEmptyJSONList() {
         let (sut, client) = makeSUT()
