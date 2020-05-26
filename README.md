@@ -1,7 +1,7 @@
 
 # WeatherApp
 
-![CI](https://github.com/viniciusml/WeatherApp/workflows/CI/badge.svg)
+![CI](https://github.com/viniciusml/WeatherApp/workflows/CI/badge.svg?branch=master)
 
 > An application that collects the current temperature information from '[Open Weather Map](http://openweathermap.org)' for the current location and displays current temperature (ºC) and weather.
 
