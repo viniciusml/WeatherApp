@@ -74,27 +74,3 @@ class CurrentWeatherViewController: UIViewController {
         }
     }
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-struct CurrentWeatherViewRepresentable: UIViewRepresentable {
-    func makeUIView(context: Context) -> UIView {
-        let vc = CurrentWeatherViewController()
-        let weather = WeatherItem(coord: Coord(lon: 200.00, lat: 200.00), weather: [Weather(main: "Weather", description: "description")], main: Main(temp: 200.00), name: "City Name")
-        vc.locations = [CLLocation(latitude: 200, longitude: 200)]
-        vc.currentWeather = weather
-        return vc.view
-    }
-
-    func updateUIView(_ view: UIView, context: Context) {
-
-    }
-}
-
-@available(iOS 13.0, *)
-struct CurrentWeatherController_Preview: PreviewProvider {
-    static var previews: some View {
-        CurrentWeatherViewRepresentable()
-    }
-}
-#endif
