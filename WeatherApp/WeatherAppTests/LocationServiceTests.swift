@@ -13,30 +13,54 @@ import XCTest
 class LocationServiceTests: XCTestCase {
     
     func test_init_doesNotRequestsUserAuthorization() {
-        let (_, provider) = makeSUT(.spy)
+        let (_, provider) = makeSUT()
+
+        XCTAssertEqual(provider.authorizationRequestCount, 0)
+    }
+
+    func test_init_configuresProvider() {
+        let (sut, provider) = makeSUT()
+
+        XCTAssertEqual(provider.desiredAccuracy, kCLLocationAccuracyHundredMeters)
+        XCTAssertTrue(provider.delegate === sut)
+    }
+    
+    func test_getCurrentLocation_requestAuthorizationWhenNotPreviouslyAuthorized() {
+        let (sut, provider) = makeSUT(.spy)
+
+        sut.getCurrentLocation { _ in }
+
+        XCTAssertEqual(provider.authorizationRequestCount, 1)
+    }
+
+    func test_getCurrentLocation_doesNotRequestAuthorizationWhenPreviouslyAuthorized() {
+        let (sut, provider) = makeSUT(.authorizedSpy)
+
+        sut.getCurrentLocation { _ in }
 
         XCTAssertEqual(provider.authorizationRequestCount, 0)
     }
     
-    func test_provider_requestAuthorization_requestsUserAuthorization() {
-        let (_, provider) = makeSUT()
-        
-        provider.requestWhenInUseAuthorization()
-        
-        XCTAssertNotNil(provider.isAuthorized)
+    func test_getCurrentLocation_requestsUserLocation() {
+        let (sut, provider) = makeSUT()
+
+        sut.getCurrentLocation { _ in }
+
+        XCTAssertEqual(provider.locationRequestCount, 1)
+    }
+
+    func test_getCurrentLocationTwice_requestsUserLocationTwice() {
+        let (sut, provider) = makeSUT()
+
+        sut.getCurrentLocation { _ in }
+        sut.getCurrentLocation { _ in }
+
+        XCTAssertEqual(provider.locationRequestCount, 2)
     }
     
-    func test_provider_requestLocation_requestsUserLocation() {
-        let (_, provider) = makeSUT()
-        
-        provider.requestLocation()
-        
-        XCTAssertFalse(provider.locationRequests.isEmpty)
-    }
-    
-    func test_service_getCurrentLocation_deliversErrorWhenNotAuthorized() {
+    func test_getCurrentLocation_deliversErrorWhenNotAuthorized() {
         let (sut, _) = makeSUT()
-        
+
         sut.getCurrentLocation { result in
             switch result {
             case let .failure(error):
@@ -46,69 +70,33 @@ class LocationServiceTests: XCTestCase {
             }
         }
     }
-    
-    func test_service_getCurrentLocation_requestsAuthorizationWhenNotAuthorized() {
-        let (sut, provider) = makeSUT()
-        
-        sut.getCurrentLocation { _ in }
-        
-        XCTAssertEqual(provider.authorizationRequests, [true])
-    }
-    
-    func test_service_getCurrentLocation_doesNotRequestAuthorizationWhenPreviouslyAuthorized() {
-        let (sut, provider) = makeSUT()
-        
-        provider.isAuthorized = true
-        sut.getCurrentLocation { _ in }
-        
-        XCTAssertEqual(provider.authorizationRequests, [])
-    }
-    
-    func test_service_getCurrentLocation_requestsLocationWhenAuthorized() {
-        let (sut, provider) = makeSUT()
-        
-        provider.isAuthorized = true
-        sut.getCurrentLocation { _ in }
-        
-        XCTAssertEqual(provider.locationRequests, [true])
-    }
-    
-    func test_service_getCurrentLocationTwice_requestsLocationTwice() {
-        let (sut, provider) = makeSUT()
 
-        provider.isAuthorized = true
-        sut.getCurrentLocation { _ in }
-        sut.getCurrentLocation { _ in }
-        
-        XCTAssertEqual(provider.locationRequests, [true, true])
-    }
+//    func test_getCurrentLocation_deliversErrorOnUpdatingLocationError() {
+//        let (sut, provider) = makeSUT()
+//
+//        sut.locationManager(provider, didFailWithError: NSError(domain: "any", code: 1))
+//
+//        expect(sut, toCompleteWith: .failure(.cannotBeLocated))
+//    }
     
-    func test_service_getCurrentLocation_deliversErrorOnUpdatingLocationError() {
-        let (sut, provider) = makeSUT()
-
-        provider.isAuthorized = true
-
-        expect(sut, toCompleteWith: .failure(.cannotBeLocated))
-    }
-    
-    func test_service_getCurrentLocation_deliversLocationOnUpdatingLocationSuccess() {
-        let (sut, provider) = makeSUT()
-        
-        provider.isAuthorized = true
-        provider.locationToReturn = Coordinate(latitude: 39, longitude: 135)
-
-        expect(sut, toCompleteWith: .success(UserLocationMock()))
-    }
+//    func test_service_getCurrentLocation_deliversLocationOnUpdatingLocationSuccess() {
+//        let (sut, provider) = makeSUT()
+//
+//        provider.isAuthorized = true
+//        provider.locationToReturn = Coordinate(latitude: 39, longitude: 135)
+//
+//        expect(sut, toCompleteWith: .success(UserLocationMock()))
+//    }
     
     // MARK: - Helpers
     
-    private func makeSUT() -> (sut: LocationService, provider: LocationProviderMock) {
-        let provider = LocationProviderMock()
-        let sut = LocationService(provider: provider)
-        return (sut, provider)
-    }
+//    private func makeSUT() -> (sut: LocationService, provider: LocationProviderMock) {
+//        let provider = LocationProviderMock()
+//        let sut = LocationService(provider: provider)
+//        return (sut, provider)
+//    }
 
-    private func makeSUT(_ provider: CLLocationManager.Spy = .spy) -> (sut: LocationService, provider: CLLocationManager.Spy) {
+    private func makeSUT(_ provider: CLLocationManager.Spy = .authorizedSpy) -> (sut: LocationService, provider: CLLocationManager.Spy) {
         let sut = LocationService(provider: provider)
         return (sut, provider)
     }
@@ -140,19 +128,23 @@ class LocationServiceTests: XCTestCase {
 }
 
 private extension CLLocationManager {
-    static var spy: Spy {
-        Spy()
-    }
+    static var spy: Spy { Spy() }
+    static var authorizedSpy: Spy { AuthorizedSpy() }
 
     class Spy: CLLocationManager {
         private(set) var authorizationRequestCount = 0
-
-        override class func authorizationStatus() -> CLAuthorizationStatus {
-            .authorizedAlways
-        }
+        private(set) var locationRequestCount = 0
 
         override func requestWhenInUseAuthorization() {
             authorizationRequestCount += 1
         }
+
+        override func requestLocation() {
+            locationRequestCount += 1
+        }
+    }
+
+    class AuthorizedSpy: Spy {
+        override func needsAuthorizationRequest() -> Bool { false }
     }
 }

@@ -15,19 +15,19 @@ extension CLLocation: UserLocation { }
 
 class LocationService: NSObject, LocationAdapter {
         
-    var provider: LocationProvider
+    var provider: CLLocationManager
     private var currentLocation: ((LocationResult) -> Void)?
     
-    init(provider: LocationProvider = CLLocationManager()) {
+    init(provider: CLLocationManager) {
         self.provider = provider
         super.init()
         self.provider.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        self.provider.locationManagerDelegate = self
+        self.provider.delegate = self
     }
     
     func getCurrentLocation(completion: @escaping (LocationResult) -> Void) {
         self.currentLocation = completion
-        if !provider.isAuthorized {
+        if provider.needsAuthorizationRequest() {
             provider.requestWhenInUseAuthorization()
             completion(.failure(.cannotBeLocated))
         } else {
@@ -53,5 +53,11 @@ extension LocationService: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         currentLocation?(.failure(.cannotBeLocated))
+    }
+}
+
+extension CLLocationManager {
+    @objc func needsAuthorizationRequest() -> Bool {
+        CLLocationManager.authorizationStatus() == .notDetermined
     }
 }
