@@ -14,7 +14,6 @@
 		8F6A3B4F241E78E10021D3A5 /* LocationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6A3B4E241E78E10021D3A5 /* LocationServiceTests.swift */; };
 		8F6A3B53241E87990021D3A5 /* LocationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6A3B52241E87990021D3A5 /* LocationProvider.swift */; };
 		8F6A3B57241E99CB0021D3A5 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6A3B56241E99CB0021D3A5 /* LocationService.swift */; };
-		8F6A3B5F241EE48B0021D3A5 /* LocationProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6A3B5E241EE48A0021D3A5 /* LocationProviderMock.swift */; };
 		8F6A3B61241EE7940021D3A5 /* CurrentWeatherViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6A3B60241EE7940021D3A5 /* CurrentWeatherViewControllerTests.swift */; };
 		8F6A3B69241F03A10021D3A5 /* CurrentWeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6A3B68241F03A10021D3A5 /* CurrentWeatherViewController.swift */; };
 		8F6A3B6F241F0CBA0021D3A5 /* WeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6A3B6E241F0CBA0021D3A5 /* WeatherCell.swift */; };
@@ -66,7 +65,6 @@
 		8F6A3B4E241E78E10021D3A5 /* LocationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServiceTests.swift; sourceTree = "<group>"; };
 		8F6A3B52241E87990021D3A5 /* LocationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationProvider.swift; sourceTree = "<group>"; };
 		8F6A3B56241E99CB0021D3A5 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
-		8F6A3B5E241EE48A0021D3A5 /* LocationProviderMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationProviderMock.swift; sourceTree = "<group>"; };
 		8F6A3B60241EE7940021D3A5 /* CurrentWeatherViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeatherViewControllerTests.swift; sourceTree = "<group>"; };
 		8F6A3B68241F03A10021D3A5 /* CurrentWeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeatherViewController.swift; sourceTree = "<group>"; };
 		8F6A3B6E241F0CBA0021D3A5 /* WeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCell.swift; sourceTree = "<group>"; };
@@ -255,7 +253,6 @@
 				8F9EA1F5241D07C2009D6CD9 /* RemoteLoaderTests.swift */,
 				8F60BA75247711C900FDE2FC /* HTTPClientSpy.swift */,
 				8F6A3B4E241E78E10021D3A5 /* LocationServiceTests.swift */,
-				8F6A3B5E241EE48A0021D3A5 /* LocationProviderMock.swift */,
 				8F6A3B60241EE7940021D3A5 /* CurrentWeatherViewControllerTests.swift */,
 			);
 			path = WeatherAppTests;
@@ -512,7 +509,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F6A3B5F241EE48B0021D3A5 /* LocationProviderMock.swift in Sources */,
 				8F6A3B4F241E78E10021D3A5 /* LocationServiceTests.swift in Sources */,
 				8F9EA1F6241D07C2009D6CD9 /* RemoteLoaderTests.swift in Sources */,
 				8F6A3B61241EE7940021D3A5 /* CurrentWeatherViewControllerTests.swift in Sources */,
