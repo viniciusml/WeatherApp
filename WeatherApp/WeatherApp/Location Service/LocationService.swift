@@ -38,6 +38,8 @@ extension LocationService: CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse || status == .authorizedAlways {
             manager.requestLocation()
+        } else {
+            manager.requestWhenInUseAuthorization()
         }
     }
 

@@ -90,6 +90,30 @@ class LocationServiceTests: XCTestCase {
             sut.locationManager(manager, didCompleteWith: [])
         })
     }
+
+    func test_getCurrentLocation_requestsLocationWhenAuthorizationStatusDoesNotChange() {
+        let (sut, manager) = makeSUT()
+
+        sut.locationManager(manager, didChangeAuthorization: .authorizedAlways)
+        XCTAssertEqual(manager.authorizationRequestCount, 0)
+        XCTAssertEqual(manager.locationRequestCount, 1)
+
+        sut.locationManager(manager, didChangeAuthorization: .authorizedWhenInUse)
+        XCTAssertEqual(manager.authorizationRequestCount, 0)
+        XCTAssertEqual(manager.locationRequestCount, 2)
+    }
+
+    func test_getCurrentLocation_requestsAuthorizationWhenAuthorizationStatusChanges() {
+        let (sut, manager) = makeSUT()
+
+        sut.locationManager(manager, didChangeAuthorization: .denied)
+        XCTAssertEqual(manager.locationRequestCount, 0)
+        XCTAssertEqual(manager.authorizationRequestCount, 1)
+
+        sut.locationManager(manager, didChangeAuthorization: .restricted)
+        XCTAssertEqual(manager.locationRequestCount, 0)
+        XCTAssertEqual(manager.authorizationRequestCount, 2)
+    }
     
     // MARK: - Helpers
 
