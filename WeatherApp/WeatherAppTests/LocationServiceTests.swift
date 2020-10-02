@@ -6,13 +6,16 @@
 //  Copyright © 2020 Vinicius Moreira Leal. All rights reserved.
 //
 
+import CoreLocation
 import XCTest
 @testable import WeatherApp
 
 class LocationServiceTests: XCTestCase {
     
-    func test_provider_init_doesNotRequestsUserAuthorization() {
-        XCTAssertFalse(makeSUT().provider.isAuthorized)
+    func test_init_doesNotRequestsUserAuthorization() {
+        let (_, provider) = makeSUT(.spy)
+
+        XCTAssertEqual(provider.authorizationRequestCount, 0)
     }
     
     func test_provider_requestAuthorization_requestsUserAuthorization() {
@@ -104,6 +107,11 @@ class LocationServiceTests: XCTestCase {
         let sut = LocationService(provider: provider)
         return (sut, provider)
     }
+
+    private func makeSUT(_ provider: CLLocationManager.Spy = .spy) -> (sut: LocationService, provider: CLLocationManager.Spy) {
+        let sut = LocationService(provider: provider)
+        return (sut, provider)
+    }
     
     private func expect(_ sut: LocationService, toCompleteWith expectedResult: LocationResult, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Wait for request completion")
@@ -127,6 +135,24 @@ class LocationServiceTests: XCTestCase {
     struct UserLocationMock: UserLocation {
         var coordinate: Coordinate {
             return Coordinate(latitude: 39, longitude: 135)
+        }
+    }
+}
+
+private extension CLLocationManager {
+    static var spy: Spy {
+        Spy()
+    }
+
+    class Spy: CLLocationManager {
+        private(set) var authorizationRequestCount = 0
+
+        override class func authorizationStatus() -> CLAuthorizationStatus {
+            .authorizedAlways
+        }
+
+        override func requestWhenInUseAuthorization() {
+            authorizationRequestCount += 1
         }
     }
 }
