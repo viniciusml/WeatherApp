@@ -8,7 +8,7 @@
 
 import CoreLocation
 import XCTest
-@testable import WeatherApp
+import WeatherApp
 
 class LocationServiceTests: XCTestCase {
     

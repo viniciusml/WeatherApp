@@ -254,9 +254,9 @@
 				8F9EA1E2241CF5A2009D6CD9 /* Info.plist */,
 				8F9EA1F5241D07C2009D6CD9 /* RemoteLoaderTests.swift */,
 				8F60BA75247711C900FDE2FC /* HTTPClientSpy.swift */,
+				8FF6D44A25279A25002BAD68 /* CLLocationManagerSpy.swift */,
 				8F6A3B4E241E78E10021D3A5 /* LocationServiceTests.swift */,
 				8F6A3B60241EE7940021D3A5 /* CurrentWeatherViewControllerTests.swift */,
-				8FF6D44A25279A25002BAD68 /* CLLocationManagerSpy.swift */,
 			);
 			path = WeatherAppTests;
 			sourceTree = "<group>";

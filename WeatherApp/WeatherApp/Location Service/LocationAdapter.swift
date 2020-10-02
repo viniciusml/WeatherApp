@@ -12,13 +12,13 @@ protocol LocationAdapter {
     func getCurrentLocation(completion: @escaping (LocationResult) -> Void)
 }
 
-enum LocationError: Error {
+public enum LocationError: Error {
     case cannotBeLocated
 }
 
-protocol UserLocation {
+public protocol UserLocation {
     var coordinate: Coordinate { get }
 }
 
-typealias LocationResult = Result<UserLocation, LocationError>
+public typealias LocationResult = Result<UserLocation, LocationError>
 

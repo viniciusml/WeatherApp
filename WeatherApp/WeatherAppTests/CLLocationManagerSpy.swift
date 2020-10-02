@@ -8,7 +8,7 @@
 
 import Foundation
 import CoreLocation
-@testable import WeatherApp
+import WeatherApp
 
 extension CLLocationManager {
     static var spy: Spy { Spy() }
