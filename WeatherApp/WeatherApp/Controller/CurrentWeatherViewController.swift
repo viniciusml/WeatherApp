@@ -47,10 +47,10 @@ class CurrentWeatherViewController: UIViewController {
     
     func getLocation() {
         service = LocationService(provider: provider)
-        
-        service?.getCurrentLocation { [weak self] result in
+
+        service?.currentLocation = { [weak self] result in
             guard let self = self else { return }
-            
+
             switch result {
             case let .success(location):
                 self.locations = []
@@ -59,6 +59,7 @@ class CurrentWeatherViewController: UIViewController {
                 self.showBasicAlert(title: "Error", message: "There was an \(error). Please try again.")
             }
         }
+        service?.getCurrentLocation()
     }
     
     func getWeather(for location: Coordinate?) {

@@ -28,7 +28,7 @@ class LocationServiceTests: XCTestCase {
     func test_getCurrentLocation_requestAuthorizationWhenNotPreviouslyAuthorized() {
         let (sut, provider) = makeSUT(.spy)
 
-        sut.getCurrentLocation { _ in }
+        sut.getCurrentLocation()
 
         XCTAssertEqual(provider.authorizationRequestCount, 1)
     }
@@ -36,7 +36,7 @@ class LocationServiceTests: XCTestCase {
     func test_getCurrentLocation_doesNotRequestAuthorizationWhenPreviouslyAuthorized() {
         let (sut, provider) = makeSUT(.authorizedSpy)
 
-        sut.getCurrentLocation { _ in }
+        sut.getCurrentLocation()
 
         XCTAssertEqual(provider.authorizationRequestCount, 0)
     }
@@ -44,7 +44,7 @@ class LocationServiceTests: XCTestCase {
     func test_getCurrentLocation_requestsUserLocation() {
         let (sut, provider) = makeSUT()
 
-        sut.getCurrentLocation { _ in }
+        sut.getCurrentLocation()
 
         XCTAssertEqual(provider.locationRequestCount, 1)
     }
@@ -52,59 +52,61 @@ class LocationServiceTests: XCTestCase {
     func test_getCurrentLocationTwice_requestsUserLocationTwice() {
         let (sut, provider) = makeSUT()
 
-        sut.getCurrentLocation { _ in }
-        sut.getCurrentLocation { _ in }
+        sut.getCurrentLocation()
+        sut.getCurrentLocation()
 
         XCTAssertEqual(provider.locationRequestCount, 2)
     }
     
-    func test_getCurrentLocation_deliversErrorWhenNotAuthorized() {
-        let (sut, _) = makeSUT()
+    func test_getCurrentLocation_doesNotRequestUserLocationWhenNotAuthorized() {
+        let (sut, provider) = makeSUT(.spy)
 
-        sut.getCurrentLocation { result in
-            switch result {
-            case let .failure(error):
-                XCTAssertEqual(error, .cannotBeLocated)
-            default:
-                XCTFail("Expected error, but got \(result) instead")
-            }
-        }
+        sut.getCurrentLocation()
+
+        XCTAssertEqual(provider.locationRequestCount, 0)
     }
 
-//    func test_getCurrentLocation_deliversErrorOnUpdatingLocationError() {
-//        let (sut, provider) = makeSUT()
-//
-//        sut.locationManager(provider, didFailWithError: NSError(domain: "any", code: 1))
-//
-//        expect(sut, toCompleteWith: .failure(.cannotBeLocated))
-//    }
+    func test_getCurrentLocation_deliversErrorOnManagerError() {
+        let (sut, provider) = makeSUT()
+
+        expect(sut, toCompleteWith: .failure(.cannotBeLocated), when: {
+            sut.locationManager(provider, didFailWithError: anyError())
+        })
+    }
     
-//    func test_service_getCurrentLocation_deliversLocationOnUpdatingLocationSuccess() {
-//        let (sut, provider) = makeSUT()
-//
-//        provider.isAuthorized = true
-//        provider.locationToReturn = Coordinate(latitude: 39, longitude: 135)
-//
-//        expect(sut, toCompleteWith: .success(UserLocationMock()))
-//    }
+    func test_getCurrentLocation_deliversLocationOnManagerSuccess() {
+        let (sut, provider) = makeSUT()
+        let expectedLocation = UserLocationMock(latitude: 39, longitude: 135)
+
+        expect(sut, toCompleteWith: .success(expectedLocation), when: {
+            sut.locationManager(provider, didCompleteWith: [expectedLocation])
+        })
+    }
+
+    func test_getCurrentLocation_deliversErrorOnManagerSuccessWithNoLocation() {
+        let (sut, provider) = makeSUT()
+
+        expect(sut, toCompleteWith: .failure(.cannotBeLocated), when: {
+            sut.locationManager(provider, didCompleteWith: [])
+        })
+    }
     
     // MARK: - Helpers
-    
-//    private func makeSUT() -> (sut: LocationService, provider: LocationProviderMock) {
-//        let provider = LocationProviderMock()
-//        let sut = LocationService(provider: provider)
-//        return (sut, provider)
-//    }
 
     private func makeSUT(_ provider: CLLocationManager.Spy = .authorizedSpy) -> (sut: LocationService, provider: CLLocationManager.Spy) {
         let sut = LocationService(provider: provider)
         return (sut, provider)
     }
+
+    private func anyError() -> NSError {
+        NSError(domain: "Test", code: 1)
+    }
     
-    private func expect(_ sut: LocationService, toCompleteWith expectedResult: LocationResult, file: StaticString = #file, line: UInt = #line) {
+    private func expect(_ sut: LocationService, toCompleteWith expectedResult: LocationResult, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Wait for request completion")
-   
-        sut.getCurrentLocation { receivedResult in
+
+        sut.getCurrentLocation()
+        sut.currentLocation = { receivedResult in
             switch (receivedResult, expectedResult) {
             case let (.success(receivedLocation), .success(expectedLocation)):
                 XCTAssertEqual(receivedLocation.coordinate.latitude, expectedLocation.coordinate.latitude, file: file, line: line)
@@ -116,13 +118,17 @@ class LocationServiceTests: XCTestCase {
             }
             exp.fulfill()
         }
+        action()
         
-        wait(for: [exp], timeout: 1.0)
+        wait(for: [exp], timeout: 0.2)
     }
     
-    struct UserLocationMock: UserLocation {
+    private struct UserLocationMock: UserLocation {
+        let latitude: Double
+        let longitude: Double
+
         var coordinate: Coordinate {
-            return Coordinate(latitude: 39, longitude: 135)
+            Coordinate(latitude: latitude, longitude: longitude)
         }
     }
 }

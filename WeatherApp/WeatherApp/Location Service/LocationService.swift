@@ -13,10 +13,10 @@ typealias Coordinate = CLLocationCoordinate2D
 
 extension CLLocation: UserLocation { }
 
-class LocationService: NSObject, LocationAdapter {
+class LocationService: NSObject {
         
     var provider: CLLocationManager
-    private var currentLocation: ((LocationResult) -> Void)?
+    var currentLocation: ((LocationResult) -> Void)?
     
     init(provider: CLLocationManager) {
         self.provider = provider
@@ -25,11 +25,9 @@ class LocationService: NSObject, LocationAdapter {
         self.provider.delegate = self
     }
     
-    func getCurrentLocation(completion: @escaping (LocationResult) -> Void) {
-        self.currentLocation = completion
+    func getCurrentLocation() {
         if provider.needsAuthorizationRequest() {
             provider.requestWhenInUseAuthorization()
-            completion(.failure(.cannotBeLocated))
         } else {
             provider.requestLocation()
         }
@@ -42,13 +40,18 @@ extension LocationService: CLLocationManagerDelegate {
             provider.requestLocation()
         }
     }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+
+    func locationManager(_ manager: CLLocationManager, didCompleteWith locations: [UserLocation]) {
         if let location = locations.last {
             currentLocation?(.success(location))
         } else {
             currentLocation?(.failure(.cannotBeLocated))
         }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let receivedLocations = locations.compactMap { $0 as UserLocation }
+        locationManager(manager, didCompleteWith: receivedLocations)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
