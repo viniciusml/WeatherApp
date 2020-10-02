@@ -6,109 +6,131 @@
 //  Copyright © 2020 Vinicius Moreira Leal. All rights reserved.
 //
 
+import CoreLocation
 import XCTest
-@testable import WeatherApp
+import WeatherApp
 
 class LocationServiceTests: XCTestCase {
     
-    func test_provider_init_doesNotRequestsUserAuthorization() {
-        XCTAssertFalse(makeSUT().provider.isAuthorized)
-    }
-    
-    func test_provider_requestAuthorization_requestsUserAuthorization() {
-        let (_, provider) = makeSUT()
-        
-        provider.requestWhenInUseAuthorization()
-        
-        XCTAssertNotNil(provider.isAuthorized)
-    }
-    
-    func test_provider_requestLocation_requestsUserLocation() {
-        let (_, provider) = makeSUT()
-        
-        provider.requestLocation()
-        
-        XCTAssertFalse(provider.locationRequests.isEmpty)
-    }
-    
-    func test_service_getCurrentLocation_deliversErrorWhenNotAuthorized() {
-        let (sut, _) = makeSUT()
-        
-        sut.getCurrentLocation { result in
-            switch result {
-            case let .failure(error):
-                XCTAssertEqual(error, .cannotBeLocated)
-            default:
-                XCTFail("Expected error, but got \(result) instead")
-            }
-        }
-    }
-    
-    func test_service_getCurrentLocation_requestsAuthorizationWhenNotAuthorized() {
-        let (sut, provider) = makeSUT()
-        
-        sut.getCurrentLocation { _ in }
-        
-        XCTAssertEqual(provider.authorizationRequests, [true])
-    }
-    
-    func test_service_getCurrentLocation_doesNotRequestAuthorizationWhenPreviouslyAuthorized() {
-        let (sut, provider) = makeSUT()
-        
-        provider.isAuthorized = true
-        sut.getCurrentLocation { _ in }
-        
-        XCTAssertEqual(provider.authorizationRequests, [])
-    }
-    
-    func test_service_getCurrentLocation_requestsLocationWhenAuthorized() {
-        let (sut, provider) = makeSUT()
-        
-        provider.isAuthorized = true
-        sut.getCurrentLocation { _ in }
-        
-        XCTAssertEqual(provider.locationRequests, [true])
-    }
-    
-    func test_service_getCurrentLocationTwice_requestsLocationTwice() {
-        let (sut, provider) = makeSUT()
+    func test_init_doesNotRequestsUserAuthorization() {
+        let (_, manager) = makeSUT()
 
-        provider.isAuthorized = true
-        sut.getCurrentLocation { _ in }
-        sut.getCurrentLocation { _ in }
-        
-        XCTAssertEqual(provider.locationRequests, [true, true])
+        XCTAssertEqual(manager.authorizationRequestCount, 0)
+    }
+
+    func test_init_configuresManager() {
+        let (sut, manager) = makeSUT()
+
+        XCTAssertEqual(manager.desiredAccuracy, kCLLocationAccuracyHundredMeters)
+        XCTAssertTrue(manager.delegate === sut)
     }
     
-    func test_service_getCurrentLocation_deliversErrorOnUpdatingLocationError() {
-        let (sut, provider) = makeSUT()
+    func test_getCurrentLocation_requestAuthorizationWhenNotPreviouslyAuthorized() {
+        let (sut, manager) = makeSUT(.spy)
 
-        provider.isAuthorized = true
+        sut.getCurrentLocation()
 
-        expect(sut, toCompleteWith: .failure(.cannotBeLocated))
+        XCTAssertEqual(manager.authorizationRequestCount, 1)
+    }
+
+    func test_getCurrentLocation_doesNotRequestAuthorizationWhenPreviouslyAuthorized() {
+        let (sut, manager) = makeSUT(.authorizedSpy)
+
+        sut.getCurrentLocation()
+
+        XCTAssertEqual(manager.authorizationRequestCount, 0)
     }
     
-    func test_service_getCurrentLocation_deliversLocationOnUpdatingLocationSuccess() {
-        let (sut, provider) = makeSUT()
-        
-        provider.isAuthorized = true
-        provider.locationToReturn = Coordinate(latitude: 39, longitude: 135)
+    func test_getCurrentLocation_requestsUserLocation() {
+        let (sut, manager) = makeSUT()
 
-        expect(sut, toCompleteWith: .success(UserLocationMock()))
+        sut.getCurrentLocation()
+
+        XCTAssertEqual(manager.locationRequestCount, 1)
+    }
+
+    func test_getCurrentLocationTwice_requestsUserLocationTwice() {
+        let (sut, manager) = makeSUT()
+
+        sut.getCurrentLocation()
+        sut.getCurrentLocation()
+
+        XCTAssertEqual(manager.locationRequestCount, 2)
+    }
+    
+    func test_getCurrentLocation_doesNotRequestUserLocationWhenNotAuthorized() {
+        let (sut, manager) = makeSUT(.spy)
+
+        sut.getCurrentLocation()
+
+        XCTAssertEqual(manager.locationRequestCount, 0)
+    }
+
+    func test_getCurrentLocation_deliversErrorOnManagerError() {
+        let (sut, manager) = makeSUT()
+
+        expect(sut, toCompleteWith: .failure(.cannotBeLocated), when: {
+            sut.locationManager(manager, didFailWithError: anyError())
+        })
+    }
+    
+    func test_getCurrentLocation_deliversLocationOnManagerSuccess() {
+        let (sut, manager) = makeSUT()
+        let expectedLocation = UserLocationMock(latitude: 39, longitude: 135)
+
+        expect(sut, toCompleteWith: .success(expectedLocation), when: {
+            sut.locationManager(manager, didCompleteWith: [expectedLocation])
+        })
+    }
+
+    func test_getCurrentLocation_deliversErrorOnManagerSuccessWithNoLocation() {
+        let (sut, manager) = makeSUT()
+
+        expect(sut, toCompleteWith: .failure(.cannotBeLocated), when: {
+            sut.locationManager(manager, didCompleteWith: [])
+        })
+    }
+
+    func test_getCurrentLocation_requestsLocationWhenAuthorizationStatusDoesNotChange() {
+        let (sut, manager) = makeSUT()
+
+        sut.locationManager(manager, didChangeAuthorization: .authorizedAlways)
+        XCTAssertEqual(manager.authorizationRequestCount, 0)
+        XCTAssertEqual(manager.locationRequestCount, 1)
+
+        sut.locationManager(manager, didChangeAuthorization: .authorizedWhenInUse)
+        XCTAssertEqual(manager.authorizationRequestCount, 0)
+        XCTAssertEqual(manager.locationRequestCount, 2)
+    }
+
+    func test_getCurrentLocation_requestsAuthorizationWhenAuthorizationStatusChanges() {
+        let (sut, manager) = makeSUT()
+
+        sut.locationManager(manager, didChangeAuthorization: .denied)
+        XCTAssertEqual(manager.locationRequestCount, 0)
+        XCTAssertEqual(manager.authorizationRequestCount, 1)
+
+        sut.locationManager(manager, didChangeAuthorization: .restricted)
+        XCTAssertEqual(manager.locationRequestCount, 0)
+        XCTAssertEqual(manager.authorizationRequestCount, 2)
     }
     
     // MARK: - Helpers
-    
-    private func makeSUT() -> (sut: LocationService, provider: LocationProviderMock) {
-        let provider = LocationProviderMock()
-        let sut = LocationService(provider: provider)
-        return (sut, provider)
+
+    private func makeSUT(_ manager: CLLocationManager.Spy = .authorizedSpy) -> (sut: LocationService, manager: CLLocationManager.Spy) {
+        let sut = LocationService(manager: manager)
+        return (sut, manager)
+    }
+
+    private func anyError() -> NSError {
+        NSError(domain: "Test", code: 1)
     }
     
-    private func expect(_ sut: LocationService, toCompleteWith expectedResult: LocationResult, file: StaticString = #file, line: UInt = #line) {
+    private func expect(_ sut: LocationService, toCompleteWith expectedResult: LocationResult, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Wait for request completion")
-   
-        sut.getCurrentLocation { receivedResult in
+
+        sut.getCurrentLocation()
+        sut.currentLocation = { receivedResult in
             switch (receivedResult, expectedResult) {
             case let (.success(receivedLocation), .success(expectedLocation)):
                 XCTAssertEqual(receivedLocation.coordinate.latitude, expectedLocation.coordinate.latitude, file: file, line: line)
@@ -120,13 +142,17 @@ class LocationServiceTests: XCTestCase {
             }
             exp.fulfill()
         }
+        action()
         
-        wait(for: [exp], timeout: 1.0)
+        wait(for: [exp], timeout: 0.2)
     }
     
-    struct UserLocationMock: UserLocation {
+    private struct UserLocationMock: UserLocation {
+        let latitude: Double
+        let longitude: Double
+
         var coordinate: Coordinate {
-            return Coordinate(latitude: 39, longitude: 135)
+            Coordinate(latitude: latitude, longitude: longitude)
         }
     }
 }

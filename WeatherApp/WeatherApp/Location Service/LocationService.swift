@@ -9,49 +9,60 @@
 import Foundation
 import CoreLocation
 
-typealias Coordinate = CLLocationCoordinate2D
+public typealias Coordinate = CLLocationCoordinate2D
 
-extension CLLocation: UserLocation { }
+extension CLLocation: UserLocation {}
 
-class LocationService: NSObject, LocationAdapter {
+public class LocationService: NSObject {
         
-    var provider: LocationProvider
-    private var currentLocation: ((LocationResult) -> Void)?
+    var manager: CLLocationManager
+    public var currentLocation: ((LocationResult) -> Void)?
     
-    init(provider: LocationProvider = CLLocationManager()) {
-        self.provider = provider
+    public init(manager: CLLocationManager) {
+        self.manager = manager
         super.init()
-        self.provider.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        self.provider.locationManagerDelegate = self
+        self.manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        self.manager.delegate = self
     }
     
-    func getCurrentLocation(completion: @escaping (LocationResult) -> Void) {
-        self.currentLocation = completion
-        if !provider.isAuthorized {
-            provider.requestWhenInUseAuthorization()
-            completion(.failure(.cannotBeLocated))
+    public func getCurrentLocation() {
+        if manager.needsAuthorizationRequest() {
+            manager.requestWhenInUseAuthorization()
         } else {
-            provider.requestLocation()
+            manager.requestLocation()
         }
     }
 }
 
 extension LocationService: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse || status == .authorizedAlways {
-            provider.requestLocation()
+            manager.requestLocation()
+        } else {
+            manager.requestWhenInUseAuthorization()
         }
     }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+
+    public func locationManager(_ manager: CLLocationManager, didCompleteWith locations: [UserLocation]) {
         if let location = locations.last {
             currentLocation?(.success(location))
         } else {
             currentLocation?(.failure(.cannotBeLocated))
         }
     }
+
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let receivedLocations = locations.compactMap { $0 as UserLocation }
+        locationManager(manager, didCompleteWith: receivedLocations)
+    }
     
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         currentLocation?(.failure(.cannotBeLocated))
+    }
+}
+
+extension CLLocationManager {
+    @objc open func needsAuthorizationRequest() -> Bool {
+        CLLocationManager.authorizationStatus() == .notDetermined
     }
 }
