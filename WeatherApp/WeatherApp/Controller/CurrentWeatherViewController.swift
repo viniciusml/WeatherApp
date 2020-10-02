@@ -16,7 +16,7 @@ class CurrentWeatherViewController: UIViewController {
         return RemoteLoader(url: "http://api.openweathermap.org/data/2.5/weather", client: client)
     }
     
-    let provider = CLLocationManager()
+    let manager = CLLocationManager()
     var service: LocationService?
     
     var locations = [UserLocation]() {
@@ -46,7 +46,7 @@ class CurrentWeatherViewController: UIViewController {
     }
     
     func getLocation() {
-        service = LocationService(provider: provider)
+        service = LocationService(manager: manager)
 
         service?.currentLocation = { [weak self] result in
             guard let self = self else { return }

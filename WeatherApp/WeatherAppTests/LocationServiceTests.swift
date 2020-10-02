@@ -13,89 +13,89 @@ import WeatherApp
 class LocationServiceTests: XCTestCase {
     
     func test_init_doesNotRequestsUserAuthorization() {
-        let (_, provider) = makeSUT()
+        let (_, manager) = makeSUT()
 
-        XCTAssertEqual(provider.authorizationRequestCount, 0)
+        XCTAssertEqual(manager.authorizationRequestCount, 0)
     }
 
-    func test_init_configuresProvider() {
-        let (sut, provider) = makeSUT()
+    func test_init_configuresManager() {
+        let (sut, manager) = makeSUT()
 
-        XCTAssertEqual(provider.desiredAccuracy, kCLLocationAccuracyHundredMeters)
-        XCTAssertTrue(provider.delegate === sut)
+        XCTAssertEqual(manager.desiredAccuracy, kCLLocationAccuracyHundredMeters)
+        XCTAssertTrue(manager.delegate === sut)
     }
     
     func test_getCurrentLocation_requestAuthorizationWhenNotPreviouslyAuthorized() {
-        let (sut, provider) = makeSUT(.spy)
+        let (sut, manager) = makeSUT(.spy)
 
         sut.getCurrentLocation()
 
-        XCTAssertEqual(provider.authorizationRequestCount, 1)
+        XCTAssertEqual(manager.authorizationRequestCount, 1)
     }
 
     func test_getCurrentLocation_doesNotRequestAuthorizationWhenPreviouslyAuthorized() {
-        let (sut, provider) = makeSUT(.authorizedSpy)
+        let (sut, manager) = makeSUT(.authorizedSpy)
 
         sut.getCurrentLocation()
 
-        XCTAssertEqual(provider.authorizationRequestCount, 0)
+        XCTAssertEqual(manager.authorizationRequestCount, 0)
     }
     
     func test_getCurrentLocation_requestsUserLocation() {
-        let (sut, provider) = makeSUT()
+        let (sut, manager) = makeSUT()
 
         sut.getCurrentLocation()
 
-        XCTAssertEqual(provider.locationRequestCount, 1)
+        XCTAssertEqual(manager.locationRequestCount, 1)
     }
 
     func test_getCurrentLocationTwice_requestsUserLocationTwice() {
-        let (sut, provider) = makeSUT()
+        let (sut, manager) = makeSUT()
 
         sut.getCurrentLocation()
         sut.getCurrentLocation()
 
-        XCTAssertEqual(provider.locationRequestCount, 2)
+        XCTAssertEqual(manager.locationRequestCount, 2)
     }
     
     func test_getCurrentLocation_doesNotRequestUserLocationWhenNotAuthorized() {
-        let (sut, provider) = makeSUT(.spy)
+        let (sut, manager) = makeSUT(.spy)
 
         sut.getCurrentLocation()
 
-        XCTAssertEqual(provider.locationRequestCount, 0)
+        XCTAssertEqual(manager.locationRequestCount, 0)
     }
 
     func test_getCurrentLocation_deliversErrorOnManagerError() {
-        let (sut, provider) = makeSUT()
+        let (sut, manager) = makeSUT()
 
         expect(sut, toCompleteWith: .failure(.cannotBeLocated), when: {
-            sut.locationManager(provider, didFailWithError: anyError())
+            sut.locationManager(manager, didFailWithError: anyError())
         })
     }
     
     func test_getCurrentLocation_deliversLocationOnManagerSuccess() {
-        let (sut, provider) = makeSUT()
+        let (sut, manager) = makeSUT()
         let expectedLocation = UserLocationMock(latitude: 39, longitude: 135)
 
         expect(sut, toCompleteWith: .success(expectedLocation), when: {
-            sut.locationManager(provider, didCompleteWith: [expectedLocation])
+            sut.locationManager(manager, didCompleteWith: [expectedLocation])
         })
     }
 
     func test_getCurrentLocation_deliversErrorOnManagerSuccessWithNoLocation() {
-        let (sut, provider) = makeSUT()
+        let (sut, manager) = makeSUT()
 
         expect(sut, toCompleteWith: .failure(.cannotBeLocated), when: {
-            sut.locationManager(provider, didCompleteWith: [])
+            sut.locationManager(manager, didCompleteWith: [])
         })
     }
     
     // MARK: - Helpers
 
-    private func makeSUT(_ provider: CLLocationManager.Spy = .authorizedSpy) -> (sut: LocationService, provider: CLLocationManager.Spy) {
-        let sut = LocationService(provider: provider)
-        return (sut, provider)
+    private func makeSUT(_ manager: CLLocationManager.Spy = .authorizedSpy) -> (sut: LocationService, manager: CLLocationManager.Spy) {
+        let sut = LocationService(manager: manager)
+        return (sut, manager)
     }
 
     private func anyError() -> NSError {
